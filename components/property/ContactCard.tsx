@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Mail, Phone, MessageCircle, Star, Award } from 'lucide-react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 interface ContactCardProps {
   name: string;
@@ -26,6 +27,7 @@ const ContactCard = ({
   propertiesListed,
   verified,
 }: ContactCardProps) => {
+  const { t } = useLanguage();
   const handleWhatsApp = () => {
     const message = encodeURIComponent('Hi, I am interested in this property listing.');
     window.open(`https://wa.me/${whatsapp}?text=${message}`, '_blank');
@@ -73,7 +75,7 @@ const ContactCard = ({
                   <span className="text-sm font-semibold">{rating}</span>
                 </div>
                 <span className="text-indigo-200 text-xs">•</span>
-                <span className="text-sm">{propertiesListed} listings</span>
+                <span className="text-sm">{propertiesListed} {t('card.listings')}</span>
               </div>
             </div>
           </div>
@@ -87,7 +89,7 @@ const ContactCard = ({
               <Phone className="w-4 h-4 text-slate-600" />
             </div>
             <div className="flex-1">
-              <div className="text-xs text-slate-500">Phone</div>
+              <div className="text-xs text-slate-500">{t('card.phone')}</div>
               <div className="font-semibold">{phone}</div>
             </div>
           </div>
@@ -98,7 +100,7 @@ const ContactCard = ({
               <Mail className="w-4 h-4 text-slate-600" />
             </div>
             <div className="flex-1">
-              <div className="text-xs text-slate-500">Email</div>
+              <div className="text-xs text-slate-500">{t('card.email')}</div>
               <div className="font-semibold text-sm">{email}</div>
             </div>
           </div>
@@ -109,7 +111,7 @@ const ContactCard = ({
               <MessageCircle className="w-4 h-4 text-slate-600" />
             </div>
             <div className="flex-1">
-              <div className="text-xs text-slate-500">WhatsApp</div>
+              <div className="text-xs text-slate-500">{t('card.whatsapp')}</div>
               <div className="font-semibold">{whatsapp}</div>
             </div>
           </div>
@@ -125,7 +127,7 @@ const ContactCard = ({
             className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300 flex items-center justify-center gap-2"
           >
             <MessageCircle className="w-5 h-5" />
-            Chat on WhatsApp
+            {t('card.chatOnWhatsApp')}
           </motion.button>
 
           {/* Email Button */}
@@ -136,7 +138,7 @@ const ContactCard = ({
             className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white py-3.5 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-all duration-300 flex items-center justify-center gap-2"
           >
             <Mail className="w-5 h-5" />
-            Send Email
+            {t('card.sendEmail')}
           </motion.button>
 
           {/* Call Button */}
@@ -147,7 +149,7 @@ const ContactCard = ({
             className="w-full border-2 border-slate-300 hover:border-slate-400 text-slate-700 py-3.5 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2"
           >
             <Phone className="w-5 h-5" />
-            Call Now
+            {t('card.callNow')}
           </motion.button>
         </div>
 
@@ -157,10 +159,10 @@ const ContactCard = ({
             <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-4 border border-indigo-200">
               <div className="flex items-center gap-2 text-indigo-700">
                 <Award className="w-5 h-5" />
-                <span className="text-sm font-semibold">Verified Professional</span>
+                <span className="text-sm font-semibold">{t('card.verifiedProfessional')}</span>
               </div>
               <p className="text-xs text-slate-600 mt-1">
-                This agent has been verified and trusted by OwersDirect
+                {t('card.verifiedBy')}
               </p>
             </div>
           </div>

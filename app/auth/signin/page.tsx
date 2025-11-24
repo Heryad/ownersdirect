@@ -5,8 +5,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { login } from '@/actions/auth';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function SignInPage() {
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -50,8 +52,8 @@ export default function SignInPage() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Welcome Back</h2>
-            <p className="text-slate-600">Sign in to your account to continue</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">{t('auth.signin.title')}</h2>
+            <p className="text-slate-600">{t('auth.signin.subtitle')}</p>
           </div>
 
           {/* Error Message */}
@@ -71,7 +73,7 @@ export default function SignInPage() {
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
-                Email Address
+                {t('auth.signin.email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -81,7 +83,7 @@ export default function SignInPage() {
                   type="email"
                   required
                   className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white placeholder:text-slate-600"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.signin.emailPlaceholder')}
                 />
               </div>
             </div>
@@ -89,7 +91,7 @@ export default function SignInPage() {
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
-                Password
+                {t('auth.signin.password')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -99,7 +101,7 @@ export default function SignInPage() {
                   type={showPassword ? 'text' : 'password'}
                   required
                   className="w-full pl-10 pr-12 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white placeholder:text-slate-600"
-                  placeholder="Enter your password"
+                  placeholder={t('auth.signin.passwordPlaceholder')}
                 />
                 <button
                   type="button"
@@ -119,10 +121,10 @@ export default function SignInPage() {
                   name="rememberMe"
                   className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500"
                 />
-                <span className="text-sm text-slate-700">Remember me</span>
+                <span className="text-sm text-slate-700">{t('auth.signin.rememberMe')}</span>
               </label>
               <Link href="/auth/forgot-password" className="text-sm text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
-                Forgot password?
+                {t('auth.signin.forgotPassword')}
               </Link>
             </div>
 
@@ -137,11 +139,11 @@ export default function SignInPage() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Signing In...
+                  {t('auth.signin.loading')}
                 </>
               ) : (
                 <>
-                  Sign In
+                  {t('auth.signin.button')}
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -154,7 +156,7 @@ export default function SignInPage() {
               <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-slate-500">Or continue with</span>
+              <span className="px-4 bg-white text-slate-500">{t('auth.signin.orContinueWith')}</span>
             </div>
           </div>
 
@@ -189,9 +191,9 @@ export default function SignInPage() {
 
           {/* Sign Up Link */}
           <p className="mt-8 text-center text-sm text-slate-600">
-            Don't have an account?{' '}
+            {t('auth.signin.noAccount')}{' '}
             <Link href="/auth/signup" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
-              Sign up for free
+              {t('auth.signin.signup')}
             </Link>
           </p>
         </div>

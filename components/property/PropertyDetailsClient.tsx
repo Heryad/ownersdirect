@@ -9,6 +9,7 @@ import ImageGallery from '@/components/property/ImageGallery';
 import PropertyDetails from '@/components/property/PropertyDetails';
 import PropertyAmenities, { amenityIcons } from '@/components/property/PropertyAmenities';
 import ContactCard from '@/components/property/ContactCard';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 interface PropertyDetailsClientProps {
     property: any; // We can improve this type later
@@ -16,16 +17,17 @@ interface PropertyDetailsClientProps {
 
 export default function PropertyDetailsClient({ property }: PropertyDetailsClientProps) {
     const router = useRouter();
+    const { t } = useLanguage();
 
     if (!property) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 gap-4">
-                <h1 className="text-2xl font-bold text-slate-900">Property not found</h1>
+                <h1 className="text-2xl font-bold text-slate-900">{t('propertyDetails.notFound')}</h1>
                 <button
                     onClick={() => router.back()}
                     className="text-indigo-600 hover:text-indigo-700 font-semibold"
                 >
-                    Go back to listings
+                    {t('propertyDetails.backToListings')}
                 </button>
             </div>
         );
@@ -55,7 +57,7 @@ export default function PropertyDetailsClient({ property }: PropertyDetailsClien
                             className="flex items-center gap-2 text-slate-600 hover:text-indigo-600 transition-colors"
                         >
                             <ArrowLeft className="w-5 h-5" />
-                            <span className="font-semibold">Back to listings</span>
+                            <span className="font-semibold">{t('propertyDetails.backToListings')}</span>
                         </motion.button>
 
                         <div className="flex items-center gap-3">
@@ -92,7 +94,7 @@ export default function PropertyDetailsClient({ property }: PropertyDetailsClien
                             <span className="text-slate-300">•</span>
                             <div className="flex items-center gap-2">
                                 <Calendar className="w-5 h-5 text-indigo-600" />
-                                <span>Available {property.availableFrom}</span>
+                                <span>{t('propertyDetails.available')} {property.availableFrom}</span>
                             </div>
                         </div>
                     </motion.div>
@@ -117,7 +119,7 @@ export default function PropertyDetailsClient({ property }: PropertyDetailsClien
                             transition={{ duration: 0.6 }}
                             className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200"
                         >
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">About This Property</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 mb-4">{t('propertyDetails.about')}</h2>
                             <div className="text-slate-700 leading-relaxed space-y-4 whitespace-pre-line">
                                 {property.description}
                             </div>
@@ -148,12 +150,12 @@ export default function PropertyDetailsClient({ property }: PropertyDetailsClien
                             transition={{ duration: 0.6 }}
                             className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200"
                         >
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">Location</h2>
+                            <h2 className="text-2xl font-bold text-slate-900 mb-4">{t('propertyDetails.location')}</h2>
                             <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl flex items-center justify-center">
                                 <div className="text-center">
                                     <MapPin className="w-12 h-12 text-slate-400 mx-auto mb-2" />
                                     <p className="text-slate-600 font-semibold">{property.location}</p>
-                                    <p className="text-sm text-slate-500 mt-1">Interactive map would go here</p>
+                                    <p className="text-sm text-slate-500 mt-1">{t('propertyDetails.mapPlaceholder')}</p>
                                 </div>
                             </div>
                         </motion.div>

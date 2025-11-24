@@ -3,8 +3,10 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Mail, ArrowRight } from 'lucide-react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function VerifyEmailPage() {
+  const { t } = useLanguage();
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-900 to-blue-900 relative overflow-hidden p-4">
       {/* Background decoration */}
@@ -38,9 +40,9 @@ export default function VerifyEmailPage() {
             <Mail className="w-16 h-16 text-indigo-600" />
           </motion.div>
 
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Check Your Email</h2>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">{t('verify.title')}</h2>
           <p className="text-slate-600 mb-8">
-            We've sent a verification link to your email address. Please click the link to verify your account.
+            {t('verify.message')}
           </p>
 
           <div className="space-y-4">
@@ -50,7 +52,7 @@ export default function VerifyEmailPage() {
                 whileTap={{ scale: 0.98 }}
                 className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-3 rounded-lg font-semibold shadow-lg shadow-indigo-500/50 hover:shadow-indigo-500/75 transition-all duration-300 flex items-center justify-center gap-2"
               >
-                Back to Sign In
+                {t('verify.backToSignIn')}
                 <ArrowRight className="w-5 h-5" />
               </motion.button>
             </Link>
@@ -59,9 +61,9 @@ export default function VerifyEmailPage() {
           {/* Help Text */}
           <div className="mt-8 p-4 bg-slate-50 rounded-lg border border-slate-200">
             <p className="text-sm text-slate-600">
-              Didn't receive the email?{' '}
+              {t('verify.didntReceive')}{' '}
               <span className="text-indigo-600 font-semibold cursor-pointer hover:text-indigo-700">
-                Check your spam folder
+                {t('verify.checkSpam')}
               </span>
             </p>
           </div>

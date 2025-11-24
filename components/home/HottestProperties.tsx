@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import PropertyCard from '../ui/PropertyCard';
 import { TrendingUp, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 interface Property {
   id: string | number;
@@ -24,6 +25,7 @@ interface HottestPropertiesProps {
 }
 
 const HottestProperties = ({ properties }: HottestPropertiesProps) => {
+  const { t } = useLanguage();
   // Filter for featured properties or just take the first 6
   const displayedProperties = properties.slice(0, 6);
 
@@ -40,13 +42,13 @@ const HottestProperties = ({ properties }: HottestPropertiesProps) => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full font-semibold text-sm mb-4">
             <TrendingUp className="w-4 h-4" />
-            Hottest Deals
+            {t('hottest.badge')}
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            Featured <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Properties</span>
+            {t('hottest.title')} <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">{t('hottest.subtitle')}</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Explore our handpicked selection of premium properties in prime locations
+            {t('hottest.description')}
           </p>
         </motion.div>
 
@@ -79,7 +81,7 @@ const HottestProperties = ({ properties }: HottestPropertiesProps) => {
             ))
           ) : (
             <div className="col-span-full text-center py-12 text-slate-500">
-              No properties found. Be the first to list one!
+              {t('hottest.noProperties')}
             </div>
           )}
         </div>
@@ -98,8 +100,8 @@ const HottestProperties = ({ properties }: HottestPropertiesProps) => {
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-lg font-semibold shadow-lg shadow-indigo-500/50 hover:shadow-indigo-500/75 transition-all duration-300 cursor-pointer"
             >
-              View All Properties
-              <ArrowRight className="w-5 h-5" />
+              {t('hottest.viewAll')}
+              <ArrowRight className="w-5 h-5 rtl:rotate-180" />
             </motion.div>
           </Link>
         </motion.div>

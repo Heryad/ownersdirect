@@ -2,49 +2,52 @@
 
 import { motion } from 'framer-motion';
 import { Shield, Award, Users, TrendingUp, Clock, HeartHandshake } from 'lucide-react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
-const About = () => {
+const about2 = () => {
+  const { t } = useLanguage();
+
   const features = [
     {
       icon: Shield,
-      title: 'Verified Listings',
-      description: 'Every property is thoroughly verified to ensure authenticity and quality standards.',
+      title: t('about2.features.verified.title'),
+      description: t('about2.features.verified.desc'),
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Award,
-      title: 'Expert Guidance',
-      description: 'Professional real estate experts available 24/7 to assist with your property journey.',
+      title: t('about2.features.expert.title'),
+      description: t('about2.features.expert.desc'),
       color: 'from-blue-500 to-pink-500',
     },
     {
       icon: Users,
-      title: 'Trusted Community',
-      description: 'Join thousands of satisfied clients who found their dream properties with us.',
+      title: t('about2.features.community.title'),
+      description: t('about2.features.community.desc'),
       color: 'from-indigo-500 to-blue-500',
     },
     {
       icon: TrendingUp,
-      title: 'Market Insights',
-      description: 'Access real-time market data and trends to make informed investment decisions.',
+      title: t('about2.features.insights.title'),
+      description: t('about2.features.insights.desc'),
       color: 'from-orange-500 to-red-500',
     },
     {
       icon: Clock,
-      title: 'Quick Process',
-      description: 'Streamlined procedures and paperwork to get you into your property faster.',
+      title: t('about2.features.quick.title'),
+      description: t('about2.features.quick.desc'),
       color: 'from-green-500 to-emerald-500',
     },
     {
       icon: HeartHandshake,
-      title: 'Transparent Deals',
-      description: 'No hidden fees or surprises. Complete transparency in all transactions.',
+      title: t('about2.features.transparent.title'),
+      description: t('about2.features.transparent.desc'),
       color: 'from-amber-500 to-yellow-500',
     },
   ];
 
   return (
-    <section id="about" className="py-20 bg-white">
+    <section id="about2" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
@@ -55,11 +58,10 @@ const About = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            Why Choose <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">OwersDirect</span>
+            {t('about2.title')} <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">{t('about2.subtitle')}</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            We're revolutionizing real estate by connecting property owners directly with buyers and renters,
-            eliminating unnecessary middlemen and saving you time and money.
+            {t('about2.description')}
           </p>
         </motion.div>
 
@@ -92,23 +94,23 @@ const About = () => {
                 <div className="grid grid-cols-3 gap-4">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-indigo-600">15+</div>
-                    <div className="text-xs text-slate-600 mt-1">Years Experience</div>
+                    <div className="text-xs text-slate-600 mt-1">{t('hero.stats.experience')}</div>
                   </div>
                   <div className="text-center border-x border-slate-300">
                     <div className="text-3xl font-bold text-blue-600">50+</div>
-                    <div className="text-xs text-slate-600 mt-1">Cities Covered</div>
+                    <div className="text-xs text-slate-600 mt-1">{t('hero.stats.cities')}</div>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-pink-600">10K+</div>
-                    <div className="text-xs text-slate-600 mt-1">Properties</div>
+                    <div className="text-xs text-slate-600 mt-1">{t('hero.stats.properties')}</div>
                   </div>
                 </div>
               </motion.div>
             </div>
 
             {/* Decorative Elements */}
-            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full blur-3xl opacity-20"></div>
-            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-500 to-pink-500 rounded-full blur-3xl opacity-20"></div>
+            <div className="absolute -top-6 -right-6 w-32 h-32 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-full blur-3xl opacity-20 rtl:right-auto rtl:-left-6"></div>
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-500 to-pink-500 rounded-full blur-3xl opacity-20 rtl:left-auto rtl:-right-6"></div>
           </motion.div>
 
           {/* Right Side - Content */}
@@ -119,24 +121,20 @@ const About = () => {
             transition={{ duration: 0.6 }}
           >
             <h3 className="text-3xl font-bold text-slate-900 mb-6">
-              Your Trusted Partner in Real Estate
+              {t('about2.trustedPartner')}
             </h3>
             <p className="text-lg text-slate-600 mb-6 leading-relaxed">
-              Since 2009, OwersDirect has been the leading platform connecting property owners
-              directly with buyers and renters. We've helped thousands of people find their perfect
-              space while saving them significant costs.
+              {t('about2.history')}
             </p>
             <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-              Our mission is simple: make real estate transactions transparent, efficient, and
-              accessible to everyone. No complicated processes, no hidden fees—just honest,
-              direct connections between property owners and seekers.
+              {t('about2.mission')}
             </p>
 
             <div className="space-y-4">
               {[
-                { label: 'Direct owner connections', value: '100%' },
-                { label: 'Cost savings vs traditional agents', value: '40%' },
-                { label: 'Average time to close deal', value: '15 days' },
+                { label: t('about2.stats.connections'), value: '100%' },
+                { label: t('about2.stats.savings'), value: '40%' },
+                { label: t('about2.stats.time'), value: '15 days' },
               ].map((item, index) => (
                 <motion.div
                   key={item.label}
@@ -189,4 +187,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default about2;

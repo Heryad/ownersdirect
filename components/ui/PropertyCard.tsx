@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { MapPin, Bed, Bath, Square, Heart, Eye } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 interface PropertyCardProps {
   id: string | number;
@@ -33,6 +34,7 @@ const PropertyCard = ({
   featured = false,
 }: PropertyCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -58,11 +60,11 @@ const PropertyCard = ({
         <div className="absolute top-4 left-4 flex gap-2">
           <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white ${type === 'rent' ? 'bg-indigo-600' : 'bg-blue-600'
             }`}>
-            For {type === 'rent' ? 'Rent' : 'Sale'}
+            {type === 'rent' ? t('properties.filters.rent') : t('properties.filters.buy')}
           </span>
           {featured && (
             <span className="px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500">
-              Featured
+              {t('card.featured')}
             </span>
           )}
         </div>
@@ -90,7 +92,7 @@ const PropertyCard = ({
             className="px-6 py-3 bg-white text-indigo-600 rounded-lg font-semibold shadow-lg flex items-center gap-2"
           >
             <Eye className="w-5 h-5" />
-            View Details
+            {t('card.viewDetails')}
           </motion.div>
         </Link>
 
@@ -110,7 +112,7 @@ const PropertyCard = ({
             AED {price}
           </span>
           {type === 'rent' && (
-            <span className="text-slate-500 text-sm ml-1">/month</span>
+            <span className="text-slate-500 text-sm ml-1">/{t('card.month')}</span>
           )}
         </div>
 

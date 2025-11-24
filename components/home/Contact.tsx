@@ -3,8 +3,10 @@
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 const Contact = () => {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,21 +18,21 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Phone',
+      title: t('contact.info.phone'),
       details: '+1 (555) 123-4567',
       subdetails: 'Mon-Fri 9am-6pm',
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Mail,
-      title: 'Email',
+      title: t('contact.info.email'),
       details: 'hello@owersdirect.com',
       subdetails: 'We reply within 24hrs',
       color: 'from-blue-500 to-pink-500',
     },
     {
       icon: MapPin,
-      title: 'Office',
+      title: t('contact.info.office'),
       details: '123 Real Estate Ave',
       subdetails: 'Los Angeles, CA 90001',
       color: 'from-orange-500 to-red-500',
@@ -72,13 +74,13 @@ const Contact = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-lg text-white rounded-full font-semibold text-sm mb-4">
             <MessageSquare className="w-4 h-4" />
-            Get In Touch
+            {t('contact.badge')}
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Let's <span className="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">Connect</span>
+            {t('contact.title')} <span className="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">{t('contact.subtitle')}</span>
           </h2>
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            {t('contact.description')}
           </p>
         </motion.div>
 
@@ -118,7 +120,7 @@ const Contact = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
             >
-              <h3 className="text-xl font-bold text-white mb-4">Follow Us</h3>
+              <h3 className="text-xl font-bold text-white mb-4">{t('contact.followUs')}</h3>
               <div className="flex gap-4">
                 {['facebook', 'twitter', 'instagram', 'linkedin'].map((social) => (
                   <motion.button
@@ -147,7 +149,7 @@ const Contact = () => {
                 {/* Name */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Full Name *
+                    {t('contact.form.name')} *
                   </label>
                   <input
                     type="text"
@@ -155,14 +157,14 @@ const Contact = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
-                    placeholder="John Doe"
+                    placeholder={t('contact.form.placeholders.name')}
                   />
                 </div>
 
                 {/* Email */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Email Address *
+                    {t('contact.form.email')} *
                   </label>
                   <input
                     type="email"
@@ -170,7 +172,7 @@ const Contact = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
-                    placeholder="john@example.com"
+                    placeholder={t('contact.form.placeholders.email')}
                   />
                 </div>
               </div>
@@ -179,21 +181,21 @@ const Contact = () => {
                 {/* Phone */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Phone Number
+                    {t('contact.form.phone')}
                   </label>
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
-                    placeholder="+1 (555) 000-0000"
+                    placeholder={t('contact.form.placeholders.phone')}
                   />
                 </div>
 
                 {/* Subject */}
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
-                    Subject *
+                    {t('contact.form.subject')} *
                   </label>
                   <input
                     type="text"
@@ -201,7 +203,7 @@ const Contact = () => {
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
-                    placeholder="Property Inquiry"
+                    placeholder={t('contact.form.placeholders.subject')}
                   />
                 </div>
               </div>
@@ -209,7 +211,7 @@ const Contact = () => {
               {/* Message */}
               <div className="mb-6">
                 <label className="block text-sm font-semibold text-slate-700 mb-2">
-                  Message *
+                  {t('contact.form.message')} *
                 </label>
                 <textarea
                   required
@@ -217,7 +219,7 @@ const Contact = () => {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none placeholder:text-slate-600"
-                  placeholder="Tell us about your requirements..."
+                  placeholder={t('contact.form.placeholders.message')}
                 />
               </div>
 
@@ -228,8 +230,8 @@ const Contact = () => {
                 whileTap={{ scale: 0.98 }}
                 className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-4 rounded-lg font-semibold shadow-lg shadow-indigo-500/50 hover:shadow-indigo-500/75 transition-all duration-300 flex items-center justify-center gap-2"
               >
-                <Send className="w-5 h-5" />
-                Send Message
+                <Send className="w-5 h-5 rtl:rotate-180" />
+                {t('contact.form.submit')}
               </motion.button>
             </form>
           </motion.div>

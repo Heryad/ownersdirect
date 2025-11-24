@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Building2, User, LogIn } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/components/providers/LanguageProvider';
+import LanguageDropdown from '@/components/layout/LanguageDropdown';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userAvatar, setUserAvatar] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -39,11 +42,11 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Buy', href: '/properties' },
-    { name: 'Sell', href: '/properties' },
-    { name: 'Testimonials', href: '/#testimonials' },
-    { name: 'About', href: '/#about' },
-    { name: 'Contact', href: '/#contact' },
+    { name: t('nav.buy'), href: '/properties' },
+    { name: t('nav.sell'), href: '/properties/create' },
+    { name: t('nav.testimonials'), href: '/#testimonials' },
+    { name: t('nav.about'), href: '/#about' },
+    { name: t('nav.contact'), href: '/#contact' },
   ];
 
   return (
@@ -86,8 +89,10 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* CTA Button & Profile */}
+          {/* CTA Button & Profile & Language */}
           <div className="hidden md:flex items-center gap-4">
+            <LanguageDropdown />
+
             {isLoggedIn && (
               <Link href="/dashboard">
                 <motion.button
@@ -95,7 +100,7 @@ const Navbar = () => {
                   whileTap={{ scale: 0.95 }}
                   className="px-6 py-2.5 border-2 border-indigo-600 text-indigo-600 rounded-lg font-medium hover:bg-indigo-50 transition-all duration-300"
                 >
-                  Dashboard
+                  {t('nav.dashboard')}
                 </motion.button>
               </Link>
             )}
@@ -106,7 +111,7 @@ const Navbar = () => {
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-lg font-medium shadow-lg shadow-indigo-500/50 hover:shadow-indigo-500/75 transition-all duration-300"
               >
-                List Property
+                {t('nav.listProperty')}
               </motion.button>
             </Link>
 
@@ -132,20 +137,23 @@ const Navbar = () => {
                   className="flex items-center gap-2 px-6 py-2.5 border-2 border-indigo-600 text-indigo-600 rounded-lg font-medium hover:bg-indigo-50 transition-all duration-300"
                 >
                   <LogIn className="w-4 h-4" />
-                  Sign In
+                  {t('nav.signIn')}
                 </motion.button>
               </Link>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-900"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </motion.button>
+          <div className="md:hidden flex items-center gap-4">
+            <LanguageDropdown />
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-lg text-slate-900"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </motion.button>
+          </div>
         </div>
       </div>
 
@@ -185,7 +193,7 @@ const Navbar = () => {
                     transition={{ delay: navLinks.length * 0.1 }}
                     className="w-full px-6 py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-medium"
                   >
-                    Dashboard
+                    {t('nav.dashboard')}
                   </motion.button>
                 </Link>
               )}
@@ -197,7 +205,7 @@ const Navbar = () => {
                   transition={{ delay: (navLinks.length + (isLoggedIn ? 1 : 0)) * 0.1 }}
                   className="w-full px-6 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-lg font-medium shadow-lg"
                 >
-                  List Property
+                  {t('nav.listProperty')}
                 </motion.button>
               </Link>
 
@@ -210,7 +218,7 @@ const Navbar = () => {
                     className="w-full px-6 py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-medium flex items-center justify-center gap-2"
                   >
                     <User className="w-4 h-4" />
-                    My Profile
+                    {t('nav.myProfile')}
                   </motion.button>
                 </Link>
               ) : (
@@ -222,7 +230,7 @@ const Navbar = () => {
                     className="w-full px-6 py-3 border-2 border-indigo-600 text-indigo-600 rounded-lg font-medium flex items-center justify-center gap-2"
                   >
                     <LogIn className="w-4 h-4" />
-                    Sign In
+                    {t('nav.signIn')}
                   </motion.button>
                 </Link>
               )}

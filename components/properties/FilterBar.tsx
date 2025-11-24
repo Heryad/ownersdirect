@@ -1,8 +1,8 @@
-'use client';
-
-import { motion } from 'framer-motion';
-import { Search, MapPin, Home, Bed, Bath, Ruler, DollarSign, SlidersHorizontal, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, MapPin, Home, Bed, Bath, Ruler, DollarSign, SlidersHorizontal, X, Building2, ChevronDown, Check } from 'lucide-react';
+import uaeLocations from '@/lib/data/uae-locations.json';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 interface FilterBarProps {
   onFilterChange: (filters: Filters) => void;
@@ -10,7 +10,8 @@ interface FilterBarProps {
 }
 
 export interface Filters {
-  city: string;
+  emirate: string;
+  community: string;
   type: 'all' | 'rent' | 'sell';
   propertyType: string;
   bedrooms: string;
@@ -22,8 +23,10 @@ export interface Filters {
 }
 
 const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
+  const { t } = useLanguage();
   const [filters, setFilters] = useState<Filters>({
-    city: '',
+    emirate: '',
+    community: '',
     type: 'all',
     propertyType: '',
     bedrooms: '',
@@ -35,6 +38,20 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
   });
 
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAreaSuggestions, setShowAreaSuggestions] = useState(false);
+  const [filteredAreas, setFilteredAreas] = useState<string[]>([]);
+  const areaInputRef = useRef<HTMLInputElement>(null);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (areaInputRef.current && !areaInputRef.current.contains(event.target as Node)) {
+        setShowAreaSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleFilterChange = (key: keyof Filters, value: string) => {
     const newFilters = { ...filters, [key]: value };
@@ -42,9 +59,26 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
     onFilterChange(newFilters);
   };
 
+  const handleEmirateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newEmirate = e.target.value;
+    const areas = newEmirate ? uaeLocations[newEmirate as keyof typeof uaeLocations] || [] : [];
+    setFilteredAreas(areas);
+
+    const newFilters = { ...filters, emirate: newEmirate, community: '' };
+    setFilters(newFilters);
+    onFilterChange(newFilters);
+  };
+
+  const handleCommunityChange = (value: string) => {
+    const newFilters = { ...filters, community: value };
+    setFilters(newFilters);
+    onFilterChange(newFilters);
+  };
+
   const handleReset = () => {
     const resetFilters: Filters = {
-      city: '',
+      emirate: '',
+      community: '',
       type: 'all',
       propertyType: '',
       bedrooms: '',
@@ -59,16 +93,17 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
   };
 
   const propertyTypes = [
-    { value: '', label: 'All Types' },
-    { value: 'apartment', label: 'Apartment' },
-    { value: 'villa', label: 'Villa' },
-    { value: 'office', label: 'Office' },
-    { value: 'commercial', label: 'Commercial' },
-    { value: 'penthouse', label: 'Penthouse' },
+    { value: '', label: t('properties.filters.allTypes') },
+    { value: 'Apartment', label: t('hero.categories.apartment') },
+    { value: 'Villa', label: t('hero.categories.villa') },
+    { value: 'House', label: 'House' },
+    { value: 'Office', label: t('hero.categories.office') },
+    { value: 'Commercial', label: t('hero.categories.commercial') },
+    { value: 'Penthouse', label: t('hero.categories.penthouse') },
   ];
 
   const bedroomOptions = [
-    { value: '', label: 'Any' },
+    { value: '', label: t('properties.filters.any') },
     { value: '1', label: '1+' },
     { value: '2', label: '2+' },
     { value: '3', label: '3+' },
@@ -77,7 +112,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
   ];
 
   const bathroomOptions = [
-    { value: '', label: 'Any' },
+    { value: '', label: t('properties.filters.any') },
     { value: '1', label: '1+' },
     { value: '2', label: '2+' },
     { value: '3', label: '3+' },
@@ -93,49 +128,96 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
     >
       {/* Main Filters */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        {/* City Search */}
+        {/* Emirate Selector */}
         <div className="relative">
           <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+          <select
+            value={filters.emirate}
+            onChange={handleEmirateChange}
+            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer"
+          >
+            <option value="">{t('hero.selectEmirate') || 'Select Emirate'}</option>
+            {Object.keys(uaeLocations).map((e) => (
+              <option key={e} value={e}>{e}</option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        </div>
+
+        {/* Community Selector */}
+        <div className="relative" ref={areaInputRef as any}>
+          <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
           <input
             type="text"
-            placeholder="City or location"
-            value={filters.city}
-            onChange={(e) => handleFilterChange('city', e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
+            placeholder={filters.emirate ? "Select Area" : t('hero.selectEmirate')}
+            value={filters.community}
+            onChange={(e) => {
+              handleCommunityChange(e.target.value);
+              setShowAreaSuggestions(true);
+            }}
+            onFocus={() => setShowAreaSuggestions(true)}
+            disabled={!filters.emirate}
+            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600 disabled:bg-slate-50 disabled:cursor-not-allowed"
           />
+
+          {/* Suggestions Dropdown */}
+          <AnimatePresence>
+            {showAreaSuggestions && filters.emirate && filteredAreas.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+              >
+                {filteredAreas
+                  .filter(area => area.toLowerCase().includes(filters.community.toLowerCase()))
+                  .map((suggestion) => (
+                    <button
+                      key={suggestion}
+                      type="button"
+                      onClick={() => {
+                        handleCommunityChange(suggestion);
+                        setShowAreaSuggestions(false);
+                      }}
+                      className="w-full text-left px-4 py-2 hover:bg-indigo-50 text-slate-700 transition-colors flex items-center justify-between"
+                    >
+                      <span>{suggestion}</span>
+                      {filters.community === suggestion && <Check className="w-4 h-4 text-indigo-600" />}
+                    </button>
+                  ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Type Toggle */}
         <div className="flex gap-2">
           <button
             onClick={() => handleFilterChange('type', 'all')}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
-              filters.type === 'all'
-                ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${filters.type === 'all'
+              ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
           >
-            All
+            {t('properties.filters.all')}
           </button>
           <button
             onClick={() => handleFilterChange('type', 'rent')}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
-              filters.type === 'rent'
-                ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${filters.type === 'rent'
+              ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
           >
-            Rent
+            {t('properties.filters.rent')}
           </button>
           <button
             onClick={() => handleFilterChange('type', 'sell')}
-            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${
-              filters.type === 'sell'
-                ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
+            className={`flex-1 py-3 px-4 rounded-lg font-semibold transition-all ${filters.type === 'sell'
+              ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
           >
-            Buy
+            {t('properties.filters.buy')}
           </button>
         </div>
 
@@ -160,14 +242,13 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-semibold transition-all ${
-            showAdvanced
-              ? 'bg-indigo-600 text-white'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
+          className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-semibold transition-all ${showAdvanced
+            ? 'bg-indigo-600 text-white'
+            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
         >
           <SlidersHorizontal className="w-5 h-5" />
-          {showAdvanced ? 'Hide' : 'More'} Filters
+          {showAdvanced ? t('properties.filters.hideAdvanced') : t('properties.filters.advanced')}
         </motion.button>
       </div>
 
@@ -191,7 +272,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
               >
                 {bedroomOptions.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label} Bedrooms
+                    {option.label} {t('properties.filters.bedrooms')}
                   </option>
                 ))}
               </select>
@@ -207,7 +288,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
               >
                 {bathroomOptions.map((option) => (
                   <option key={option.value} value={option.value}>
-                    {option.label} Bathrooms
+                    {option.label} {t('properties.filters.bathrooms')}
                   </option>
                 ))}
               </select>
@@ -218,7 +299,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
               <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
               <input
                 type="number"
-                placeholder="Min price"
+                placeholder={t('properties.filters.priceMin')}
                 value={filters.priceMin}
                 onChange={(e) => handleFilterChange('priceMin', e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
@@ -229,7 +310,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
               <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
               <input
                 type="number"
-                placeholder="Max price"
+                placeholder={t('properties.filters.priceMax')}
                 value={filters.priceMax}
                 onChange={(e) => handleFilterChange('priceMax', e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
@@ -243,7 +324,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
               <Ruler className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
               <input
                 type="number"
-                placeholder="Min size (sqft)"
+                placeholder={t('properties.filters.sizeMin')}
                 value={filters.sizeMin}
                 onChange={(e) => handleFilterChange('sizeMin', e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
@@ -254,7 +335,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
               <Ruler className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
               <input
                 type="number"
-                placeholder="Max size (sqft)"
+                placeholder={t('properties.filters.sizeMax')}
                 value={filters.sizeMax}
                 onChange={(e) => handleFilterChange('sizeMax', e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
@@ -271,7 +352,7 @@ const FilterBar = ({ onFilterChange, onReset }: FilterBarProps) => {
               className="flex items-center gap-2 px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-all"
             >
               <X className="w-4 h-4" />
-              Reset Filters
+              {t('properties.filters.reset')}
             </motion.button>
           </div>
         </motion.div>

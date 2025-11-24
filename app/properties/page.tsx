@@ -9,12 +9,15 @@ import FilterBar, { Filters } from '@/components/properties/FilterBar';
 import PropertyCard from '@/components/ui/PropertyCard';
 import Pagination from '@/components/properties/Pagination';
 import { Search, Home } from 'lucide-react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 function PropertiesContent() {
+  const { t } = useLanguage();
   const [currentPage, setCurrentPage] = useState(1);
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<Filters>({
-    city: searchParams.get('city') || '',
+    emirate: searchParams.get('emirate') || '',
+    community: searchParams.get('community') || '',
     type: (searchParams.get('type') as 'all' | 'rent' | 'sell') || 'all',
     propertyType: searchParams.get('propertyType') || '',
     bedrooms: searchParams.get('bedrooms') || '',
@@ -37,7 +40,8 @@ function PropertiesContent() {
         const { getProperties } = await import('@/actions/properties');
 
         const filterParams: any = {};
-        if (filters.city) filterParams.city = filters.city;
+        if (filters.emirate) filterParams.emirate = filters.emirate;
+        if (filters.community) filterParams.community = filters.community;
         if (filters.type && filters.type !== 'all') filterParams.type = filters.type;
         if (filters.propertyType) filterParams.propertyType = filters.propertyType;
         if (filters.bedrooms) filterParams.bedrooms = parseInt(filters.bedrooms);
@@ -84,10 +88,10 @@ function PropertiesContent() {
             className="text-center text-white"
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Find Your Perfect Property
+              {t('properties.title')}
             </h1>
             <p className="text-xl opacity-90 max-w-2xl mx-auto">
-              Browse through our extensive collection of properties available for rent and sale
+              {t('properties.subtitle')}
             </p>
           </motion.div>
         </div>
@@ -98,7 +102,8 @@ function PropertiesContent() {
         <FilterBar
           onFilterChange={handleFilterChange}
           onReset={() => handleFilterChange({
-            city: '',
+            emirate: '',
+            community: '',
             type: 'all',
             propertyType: '',
             bedrooms: '',
@@ -117,7 +122,7 @@ function PropertiesContent() {
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
-              <p className="text-slate-600">Loading properties...</p>
+              <p className="text-slate-600">{t('properties.results.loading')}</p>
             </div>
           </div>
         ) : currentProperties.length === 0 ? (
@@ -129,13 +134,14 @@ function PropertiesContent() {
             <div className="inline-flex items-center justify-center w-20 h-20 bg-slate-100 rounded-full mb-6">
               <Search className="w-10 h-10 text-slate-400" />
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">No Properties Found</h3>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">{t('properties.results.noResults')}</h3>
             <p className="text-slate-600 mb-6">
-              Try adjusting your filters to see more results
+              {t('properties.results.tryAdjusting')}
             </p>
             <button
-              onClick={() => handleFilterChange({
-                city: '',
+              onReset={() => handleFilterChange({
+                emirate: '',
+                community: '',
                 type: 'all',
                 propertyType: '',
                 bedrooms: '',
@@ -147,7 +153,7 @@ function PropertiesContent() {
               })}
               className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
             >
-              Clear All Filters
+              {t('properties.results.clearFilters')}
             </button>
           </motion.div>
         ) : (
@@ -157,7 +163,7 @@ function PropertiesContent() {
               <div className="flex items-center gap-2 text-slate-600">
                 <Home className="w-5 h-5" />
                 <span className="font-semibold">
-                  {properties.length} {properties.length === 1 ? 'Property' : 'Properties'} Found
+                  {properties.length} {t('properties.results.found')}
                 </span>
               </div>
             </div>

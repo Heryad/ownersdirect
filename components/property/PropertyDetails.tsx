@@ -12,7 +12,9 @@ import {
   MapPin,
   FileText,
   Clock,
+  Sofa,
 } from 'lucide-react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 interface PropertyDetailsProps {
   price: string;
@@ -41,52 +43,53 @@ const PropertyDetails = ({
   furnished,
   location,
 }: PropertyDetailsProps) => {
+  const { t } = useLanguage();
   const details = [
     {
       icon: Bed,
-      label: 'Bedrooms',
+      label: t('propertyForm.fields.bedrooms'),
       value: bedrooms.toString(),
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Bath,
-      label: 'Bathrooms',
+      label: t('propertyForm.fields.bathrooms'),
       value: bathrooms.toString(),
       color: 'from-blue-500 to-pink-500',
     },
     {
       icon: Ruler,
-      label: 'Area',
-      value: `${area.toLocaleString()} sqft`,
+      label: t('propertyForm.fields.size'),
+      value: area ? `${area} sqft` : 'N/A',
       color: 'from-orange-500 to-red-500',
     },
     {
       icon: Car,
-      label: 'Parking',
+      label: t('propertyForm.fields.parking'),
       value: `${parking} ${parking === 1 ? 'space' : 'spaces'}`,
       color: 'from-green-500 to-emerald-500',
     },
     {
       icon: Home,
-      label: 'Property Type',
+      label: t('propertyForm.fields.propertyType'),
       value: propertyType,
       color: 'from-indigo-500 to-blue-500',
     },
     {
       icon: Calendar,
-      label: 'Year Built',
+      label: t('propertyForm.fields.yearBuilt'),
       value: yearBuilt.toString(),
       color: 'from-amber-500 to-yellow-500',
     },
     {
       icon: Clock,
-      label: 'Available From',
+      label: t('propertyForm.fields.availableFrom'),
       value: availableFrom,
       color: 'from-teal-500 to-cyan-500',
     },
     {
       icon: Sofa,
-      label: 'Furnishing',
+      label: t('propertyForm.fields.furnished'),
       value: furnished,
       color: 'from-rose-500 to-pink-500',
     },
@@ -106,16 +109,16 @@ const PropertyDetails = ({
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="w-6 h-6" />
               <span className="text-sm font-semibold uppercase tracking-wider opacity-90">
-                {type === 'rent' ? 'Monthly Rent' : 'Asking Price'}
+                {type === 'rent' ? t('propertyDetails.monthlyRent') : t('propertyDetails.askingPrice')}
               </span>
             </div>
             <div className="text-5xl font-bold mb-2">
               AED {price}
-              {type === 'rent' && <span className="text-xl ml-2 opacity-75">/month</span>}
+              {type === 'rent' && <span className="text-xl ml-2 opacity-75">/{t('propertyDetails.month')}</span>}
             </div>
           </div>
           <div className="px-4 py-2 bg-white/20 backdrop-blur-lg rounded-full font-semibold text-sm">
-            For {type === 'rent' ? 'Rent' : 'Sale'}
+            {type === 'rent' ? t('properties.filters.rent') : t('properties.filters.buy')}
           </div>
         </div>
         <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/20">
@@ -133,7 +136,7 @@ const PropertyDetails = ({
       >
         <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-2">
           <FileText className="w-6 h-6 text-indigo-600" />
-          Property Details
+          {t('propertyDetails.details')}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -168,19 +171,19 @@ const PropertyDetails = ({
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200"
         >
-          <h3 className="text-xl font-bold text-slate-900 mb-4">Rental Terms</h3>
+          <h3 className="text-xl font-bold text-slate-900 mb-4">{t('propertyDetails.rentalTerms')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-slate-50 rounded-lg">
-              <div className="text-sm text-slate-600 mb-1">Security Deposit</div>
+              <div className="text-sm text-slate-600 mb-1">{t('propertyDetails.securityDeposit')}</div>
               <div className="text-lg font-bold text-slate-900">AED {price}</div>
             </div>
             <div className="p-4 bg-slate-50 rounded-lg">
-              <div className="text-sm text-slate-600 mb-1">Minimum Lease</div>
-              <div className="text-lg font-bold text-slate-900">12 months</div>
+              <div className="text-sm text-slate-600 mb-1">{t('propertyDetails.minimumLease')}</div>
+              <div className="text-lg font-bold text-slate-900">{t('propertyDetails.12months')}</div>
             </div>
             <div className="p-4 bg-slate-50 rounded-lg">
-              <div className="text-sm text-slate-600 mb-1">Notice Period</div>
-              <div className="text-lg font-bold text-slate-900">2 months</div>
+              <div className="text-sm text-slate-600 mb-1">{t('propertyDetails.noticePeriod')}</div>
+              <div className="text-lg font-bold text-slate-900">{t('propertyDetails.2months')}</div>
             </div>
           </div>
         </motion.div>
@@ -189,7 +192,6 @@ const PropertyDetails = ({
   );
 };
 
-// Import Sofa icon
-import { Sofa } from 'lucide-react';
+
 
 export default PropertyDetails;

@@ -8,9 +8,12 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { createProperty } from '@/actions/properties';
 import { createClient } from '@/lib/supabase/client';
+import LocationSelector from '@/components/properties/LocationSelector';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function CreatePropertyPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [images, setImages] = useState<string[]>([]);
@@ -171,9 +174,9 @@ export default function CreatePropertyPage() {
                         transition={{ duration: 0.5 }}
                     >
                         <div className="text-center mb-10">
-                            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">List Your Property</h1>
+                            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{t('propertyForm.createTitle')}</h1>
                             <p className="text-slate-600 max-w-2xl mx-auto">
-                                Fill in the details below to list your property on OwnersDirect. Reach thousands of potential buyers and renters directly.
+                                {t('propertyForm.createSubtitle')}
                             </p>
                         </div>
 
@@ -190,50 +193,50 @@ export default function CreatePropertyPage() {
                                 <section>
                                     <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                         <Home className="w-5 h-5 text-indigo-600" />
-                                        Basic Information
+                                        {t('propertyForm.sections.basic')}
                                     </h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="md:col-span-2">
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Property Title</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.title')}</label>
                                             <input
                                                 name="title"
                                                 required
-                                                placeholder="e.g. Modern Luxury Villa with Ocean View"
+                                                placeholder={t('propertyForm.placeholders.title')}
                                                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white"
                                             />
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Listing Type</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.type')}</label>
                                             <select
                                                 name="type"
                                                 required
                                                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white"
                                             >
-                                                <option value="rent">For Rent</option>
-                                                <option value="sell">For Sale</option>
+                                                <option value="rent">{t('properties.filters.rent')}</option>
+                                                <option value="sell">{t('properties.filters.buy')}</option>
                                             </select>
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Property Type</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.propertyType')}</label>
                                             <select
                                                 name="propertyType"
                                                 required
                                                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white"
                                                 defaultValue="Apartment"
                                             >
-                                                <option value="Apartment">Apartment</option>
-                                                <option value="Villa">Villa</option>
-                                                <option value="House">House</option>
-                                                <option value="Penthouse">Penthouse</option>
-                                                <option value="Office">Office</option>
-                                                <option value="Commercial">Commercial</option>
+                                                <option value="Apartment">{t('hero.categories.apartment')}</option>
+                                                <option value="Villa">{t('hero.categories.villa')}</option>
+                                                <option value="House">{t('hero.categories.house') || 'House'}</option>
+                                                <option value="Penthouse">{t('hero.categories.penthouse')}</option>
+                                                <option value="Office">{t('hero.categories.office')}</option>
+                                                <option value="Commercial">{t('hero.categories.commercial')}</option>
                                             </select>
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Price</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.price')}</label>
                                             <div className="relative">
                                                 <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                 <input
@@ -246,17 +249,21 @@ export default function CreatePropertyPage() {
                                             </div>
                                         </div>
 
-                                        <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Location</label>
-                                            <div className="relative">
-                                                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                                <input
-                                                    name="location"
-                                                    required
-                                                    placeholder="City, State or Address"
-                                                    className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white"
-                                                />
-                                            </div>
+                                        <div className="md:col-span-2">
+                                            <LocationSelector
+                                                onLocationChange={(emirate, area) => {
+                                                    // We'll handle state update via hidden inputs or direct form submission handling if needed,
+                                                    // but for now let's use state to track it and inject into formData
+                                                    // Actually, since we use formData in handleSubmit, we need to ensure these values are included.
+                                                    // The easiest way is to use hidden inputs that update when this changes.
+                                                    const emirateInput = document.getElementById('emirate-input') as HTMLInputElement;
+                                                    const areaInput = document.getElementById('area-input') as HTMLInputElement;
+                                                    if (emirateInput) emirateInput.value = emirate;
+                                                    if (areaInput) areaInput.value = area;
+                                                }}
+                                            />
+                                            <input type="hidden" name="emirate" id="emirate-input" />
+                                            <input type="hidden" name="area" id="area-input" />
                                         </div>
                                     </div>
                                 </section>
@@ -267,11 +274,11 @@ export default function CreatePropertyPage() {
                                 <section>
                                     <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                         <Layout className="w-5 h-5 text-indigo-600" />
-                                        Property Details
+                                        {t('propertyForm.sections.details')}
                                     </h2>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Bedrooms</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.bedrooms')}</label>
                                             <div className="relative">
                                                 <Bed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                 <input
@@ -285,7 +292,7 @@ export default function CreatePropertyPage() {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Bathrooms</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.bathrooms')}</label>
                                             <div className="relative">
                                                 <Bath className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                 <input
@@ -299,7 +306,7 @@ export default function CreatePropertyPage() {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Area (sqft)</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.size')}</label>
                                             <div className="relative">
                                                 <Layout className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                 <input
@@ -313,7 +320,7 @@ export default function CreatePropertyPage() {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Parking Spots</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.parking')}</label>
                                             <div className="relative">
                                                 <Car className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                 <input
@@ -327,7 +334,7 @@ export default function CreatePropertyPage() {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Year Built</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.yearBuilt')}</label>
                                             <div className="relative">
                                                 <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                 <input
@@ -342,7 +349,7 @@ export default function CreatePropertyPage() {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Available From</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.availableFrom')}</label>
                                             <input
                                                 name="availableFrom"
                                                 type="date"
@@ -352,27 +359,27 @@ export default function CreatePropertyPage() {
                                         </div>
 
                                         <div className="md:col-span-2">
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Furnishing</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.furnished')}</label>
                                             <select
                                                 name="furnished"
                                                 required
                                                 className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white"
                                             >
-                                                <option value="Fully Furnished">Fully Furnished</option>
-                                                <option value="Semi Furnished">Semi Furnished</option>
-                                                <option value="Unfurnished">Unfurnished</option>
+                                                <option value="Fully Furnished">{t('propertyForm.options.furnished.fully')}</option>
+                                                <option value="Semi Furnished">{t('propertyForm.options.furnished.semi')}</option>
+                                                <option value="Unfurnished">{t('propertyForm.options.furnished.unfurnished')}</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     <div className="mt-6">
-                                        <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
+                                        <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.description')}</label>
                                         <textarea
                                             name="description"
                                             required
                                             rows={5}
                                             className="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white"
-                                            placeholder="Describe your property in detail..."
+                                            placeholder={t('propertyForm.placeholders.description')}
                                         ></textarea>
                                     </div>
                                 </section>
@@ -383,22 +390,22 @@ export default function CreatePropertyPage() {
                                 <section>
                                     <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                         <Upload className="w-5 h-5 text-indigo-600" />
-                                        Documents
+                                        {t('propertyForm.sections.documents')}
                                     </h2>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">ID Document</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.idDocument')}</label>
                                             <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 flex flex-col items-center justify-center gap-2 hover:border-indigo-500 hover:bg-indigo-50 transition-all">
                                                 {idDocument ? (
                                                     <div className="flex items-center gap-2 text-green-600">
-                                                        <span className="font-medium">Document Uploaded</span>
+                                                        <span className="font-medium">{t('propertyForm.status.uploaded')}</span>
                                                         <button type="button" onClick={() => setIdDocument(null)} className="text-red-500 hover:text-red-700"><X className="w-4 h-4" /></button>
                                                     </div>
                                                 ) : (
                                                     <label className="cursor-pointer text-center">
-                                                        <span className="text-indigo-600 font-medium hover:text-indigo-700">Upload ID</span>
-                                                        <span className="text-slate-500 block text-xs mt-1">PDF or Image</span>
+                                                        <span className="text-indigo-600 font-medium hover:text-indigo-700">{t('propertyForm.buttons.uploadId')}</span>
+                                                        <span className="text-slate-500 block text-xs mt-1">{t('propertyForm.hints.pdfOrImage')}</span>
                                                         <input
                                                             type="file"
                                                             accept="image/*,.pdf"
@@ -412,17 +419,17 @@ export default function CreatePropertyPage() {
                                         </div>
 
                                         <div>
-                                            <label className="block text-sm font-semibold text-slate-700 mb-2">Ownership Proof</label>
+                                            <label className="block text-sm font-semibold text-slate-700 mb-2">{t('propertyForm.fields.ownershipDocument')}</label>
                                             <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 flex flex-col items-center justify-center gap-2 hover:border-indigo-500 hover:bg-indigo-50 transition-all">
                                                 {ownershipDocument ? (
                                                     <div className="flex items-center gap-2 text-green-600">
-                                                        <span className="font-medium">Document Uploaded</span>
+                                                        <span className="font-medium">{t('propertyForm.status.uploaded')}</span>
                                                         <button type="button" onClick={() => setOwnershipDocument(null)} className="text-red-500 hover:text-red-700"><X className="w-4 h-4" /></button>
                                                     </div>
                                                 ) : (
                                                     <label className="cursor-pointer text-center">
-                                                        <span className="text-indigo-600 font-medium hover:text-indigo-700">Upload Proof</span>
-                                                        <span className="text-slate-500 block text-xs mt-1">PDF or Image</span>
+                                                        <span className="text-indigo-600 font-medium hover:text-indigo-700">{t('propertyForm.buttons.uploadProof')}</span>
+                                                        <span className="text-slate-500 block text-xs mt-1">{t('propertyForm.hints.pdfOrImage')}</span>
                                                         <input
                                                             type="file"
                                                             accept="image/*,.pdf"
@@ -443,7 +450,7 @@ export default function CreatePropertyPage() {
                                 <section>
                                     <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                         <Upload className="w-5 h-5 text-indigo-600" />
-                                        Images
+                                        {t('propertyForm.sections.images')}
                                     </h2>
 
                                     <div className="mb-6">
@@ -455,9 +462,9 @@ export default function CreatePropertyPage() {
                                                     <ImageIcon className="w-8 h-8 text-slate-400" />
                                                 )}
                                                 <span className="text-sm font-medium text-slate-600">
-                                                    {uploading ? 'Uploading...' : 'Click to upload images'}
+                                                    {uploading ? t('propertyForm.buttons.uploading') : t('propertyForm.buttons.uploadImages')}
                                                 </span>
-                                                <span className="text-xs text-slate-400">JPG, PNG, WebP up to 5MB</span>
+                                                <span className="text-xs text-slate-400">{t('propertyForm.hints.images')}</span>
                                             </div>
                                             <input
                                                 type="file"
@@ -485,7 +492,7 @@ export default function CreatePropertyPage() {
                                         ))}
                                         {images.length === 0 && !uploading && (
                                             <div className="col-span-full py-8 text-center text-slate-500 border-2 border-dashed border-slate-300 rounded-lg">
-                                                No images added yet
+                                                {t('propertyForm.status.noImages')}
                                             </div>
                                         )}
                                     </div>
@@ -497,7 +504,7 @@ export default function CreatePropertyPage() {
                                 <section>
                                     <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
                                         <Plus className="w-5 h-5 text-indigo-600" />
-                                        Amenities
+                                        {t('propertyForm.sections.amenities')}
                                     </h2>
 
                                     <div className="flex gap-2 mb-4">
@@ -505,7 +512,7 @@ export default function CreatePropertyPage() {
                                             type="text"
                                             value={currentAmenity}
                                             onChange={(e) => setCurrentAmenity(e.target.value)}
-                                            placeholder="Add amenity (e.g. WiFi, Pool, Parking)"
+                                            placeholder={t('propertyForm.placeholders.amenity')}
                                             className="flex-1 px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white"
                                         />
                                         <button
@@ -513,7 +520,7 @@ export default function CreatePropertyPage() {
                                             onClick={handleAddAmenity}
                                             className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors"
                                         >
-                                            Add
+                                            {t('propertyForm.buttons.add')}
                                         </button>
                                     </div>
 
@@ -534,7 +541,7 @@ export default function CreatePropertyPage() {
                                             </span>
                                         ))}
                                         {amenities.length === 0 && (
-                                            <p className="text-slate-500 text-sm italic">No amenities added yet</p>
+                                            <p className="text-slate-500 text-sm italic">{t('propertyForm.status.noAmenities')}</p>
                                         )}
                                     </div>
                                 </section>
@@ -550,10 +557,10 @@ export default function CreatePropertyPage() {
                                         {loading ? (
                                             <>
                                                 <Loader2 className="w-6 h-6 animate-spin" />
-                                                Creating Listing...
+                                                {t('propertyForm.status.creating')}
                                             </>
                                         ) : (
-                                            'Create Listing'
+                                            t('propertyForm.buttons.create')
                                         )}
                                     </motion.button>
                                 </div>

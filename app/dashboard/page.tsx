@@ -8,9 +8,11 @@ import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import { getUserProperties, deleteProperty } from '@/actions/properties';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function DashboardPage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(true);
     const [properties, setProperties] = useState<any[]>([]);
     const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -66,8 +68,8 @@ export default function DashboardPage() {
                     >
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                             <div>
-                                <h1 className="text-3xl font-bold text-slate-900">Owner Dashboard</h1>
-                                <p className="text-slate-600 mt-1">Manage your property listings and view performance stats</p>
+                                <h1 className="text-3xl font-bold text-slate-900">{t('dashboard.title')}</h1>
+                                <p className="text-slate-600 mt-1">{t('dashboard.welcome')}</p>
                             </div>
                             <Link href="/properties/create">
                                 <motion.button
@@ -76,7 +78,7 @@ export default function DashboardPage() {
                                     className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold shadow-lg shadow-indigo-500/30 hover:bg-indigo-700 transition-all flex items-center gap-2"
                                 >
                                     <Plus className="w-5 h-5" />
-                                    Add New Property
+                                    {t('dashboard.addProperty')}
                                 </motion.button>
                             </Link>
                         </div>
@@ -89,7 +91,7 @@ export default function DashboardPage() {
                                         <Home className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-slate-500 font-medium">Total Properties</p>
+                                        <p className="text-sm text-slate-500 font-medium">{t('dashboard.stats.totalProperties')}</p>
                                         <h3 className="text-2xl font-bold text-slate-900">{properties.length}</h3>
                                     </div>
                                 </div>
@@ -100,7 +102,7 @@ export default function DashboardPage() {
                                         <Eye className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-slate-500 font-medium">Total Views</p>
+                                        <p className="text-sm text-slate-500 font-medium">{t('dashboard.stats.totalViews')}</p>
                                         <h3 className="text-2xl font-bold text-slate-900">0</h3>
                                     </div>
                                 </div>
@@ -111,7 +113,7 @@ export default function DashboardPage() {
                                         <MessageSquare className="w-6 h-6" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-slate-500 font-medium">Total Inquiries</p>
+                                        <p className="text-sm text-slate-500 font-medium">{t('dashboard.stats.totalLeads')}</p>
                                         <h3 className="text-2xl font-bold text-slate-900">0</h3>
                                     </div>
                                 </div>
@@ -121,7 +123,7 @@ export default function DashboardPage() {
                         {/* Properties List */}
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                             <div className="p-6 border-b border-slate-200">
-                                <h2 className="text-xl font-bold text-slate-900">Your Properties</h2>
+                                <h2 className="text-xl font-bold text-slate-900">{t('dashboard.myProperties')}</h2>
                             </div>
 
                             {properties.length === 0 ? (
@@ -129,11 +131,11 @@ export default function DashboardPage() {
                                     <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <Home className="w-8 h-8 text-slate-400" />
                                     </div>
-                                    <h3 className="text-lg font-semibold text-slate-900 mb-2">No properties listed yet</h3>
-                                    <p className="text-slate-500 mb-6">Start by adding your first property listing to reach potential buyers and renters.</p>
+                                    <h3 className="text-lg font-semibold text-slate-900 mb-2">{t('dashboard.noProperties')}</h3>
+                                    <p className="text-slate-500 mb-6">{t('dashboard.addProperty')}</p>
                                     <Link href="/properties/create">
                                         <button className="px-6 py-2 bg-indigo-50 text-indigo-700 rounded-lg font-semibold hover:bg-indigo-100 transition-colors">
-                                            Create Listing
+                                            {t('dashboard.addProperty')}
                                         </button>
                                     </Link>
                                 </div>
@@ -159,7 +161,14 @@ export default function DashboardPage() {
                                                         <div className="flex items-center gap-2 mb-2">
                                                             <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${property.type === 'rent' ? 'bg-blue-100 text-blue-700' : 'bg-indigo-100 text-indigo-700'
                                                                 }`}>
-                                                                For {property.type}
+                                                                {property.type === 'rent' ? t('properties.filters.rent') : t('properties.filters.buy')}
+                                                            </span>
+                                                            {/* Status Badge */}
+                                                            <span className={`px-2 py-1 rounded text-xs font-bold uppercase ${property.status === 'published' ? 'bg-green-100 text-green-700' :
+                                                                property.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                                                    'bg-yellow-100 text-yellow-700'
+                                                                }`}>
+                                                                {t(`dashboard.status.${property.status || 'pending'}`)}
                                                             </span>
                                                             <span className="text-slate-500 text-sm">• {property.property_type}</span>
                                                         </div>
@@ -167,19 +176,19 @@ export default function DashboardPage() {
                                                         <p className="text-slate-500 text-sm mb-2">{property.location}</p>
                                                         <div className="font-bold text-indigo-600">
                                                             AED {property.price.toLocaleString()}
-                                                            {property.type === 'rent' && <span className="text-sm font-normal text-slate-500">/month</span>}
+                                                            {property.type === 'rent' && <span className="text-sm font-normal text-slate-500">/year</span>}
                                                         </div>
                                                     </div>
 
                                                     {/* Actions */}
                                                     <div className="flex items-center gap-2">
                                                         <Link href={`/property/${property.id}`}>
-                                                            <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="View">
+                                                            <button className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title={t('dashboard.actions.view')}>
                                                                 <Eye className="w-5 h-5" />
                                                             </button>
                                                         </Link>
                                                         <Link href={`/properties/edit/${property.id}`}>
-                                                            <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Edit">
+                                                            <button className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title={t('dashboard.actions.edit')}>
                                                                 <Edit className="w-5 h-5" />
                                                             </button>
                                                         </Link>
@@ -187,7 +196,7 @@ export default function DashboardPage() {
                                                             onClick={() => handleDelete(property.id)}
                                                             disabled={deletingId === property.id}
                                                             className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-                                                            title="Delete"
+                                                            title={t('dashboard.actions.delete')}
                                                         >
                                                             {deletingId === property.id ? (
                                                                 <Loader2 className="w-5 h-5 animate-spin" />

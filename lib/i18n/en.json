@@ -1,0 +1,560 @@
+{
+    "nav": {
+        "buy": "Buy",
+        "sell": "Sell",
+        "testimonials": "Testimonials",
+        "about": "About",
+        "contact": "Contact",
+        "dashboard": "Dashboard",
+        "listProperty": "List Property",
+        "signIn": "Sign In",
+        "myProfile": "My Profile"
+    },
+    "common": {
+        "loading": "Loading..."
+    },
+    "hero": {
+        "title": "Find Your Dream",
+        "subtitle": "Property Today",
+        "description": "Discover the perfect space that matches your lifestyle from thousands of verified listings",
+        "rent": "Rent",
+        "buy": "Buy",
+        "searchPlaceholder": "Enter city or location",
+        "propertyType": "Property Type",
+        "searchButton": "Search Properties",
+        "quickSearch": "Quick search:",
+        "stats": {
+            "properties": "Properties",
+            "clients": "Happy Clients",
+            "cities": "Cities",
+            "experience": "Years Experience"
+        },
+        "categories": {
+            "apartment": "Apartment",
+            "villa": "Villa",
+            "office": "Office",
+            "commercial": "Commercial",
+            "penthouse": "Penthouse"
+        },
+        "selectEmirate": "Select Emirate"
+    },
+    "properties": {
+        "title": "Find Your Perfect Property",
+        "subtitle": "Browse through our extensive collection of properties available for rent and sale",
+        "filters": {
+            "city": "City or location",
+            "type": "Type",
+            "propertyType": "Property Type",
+            "bedrooms": "Bedrooms",
+            "bathrooms": "Bathrooms",
+            "priceMin": "Min Price",
+            "priceMax": "Max Price",
+            "sizeMin": "Min Size",
+            "sizeMax": "Max Size",
+            "reset": "Reset Filters",
+            "advanced": "More Filters",
+            "hideAdvanced": "Hide Filters",
+            "allTypes": "All Types",
+            "any": "Any",
+            "rent": "Rent",
+            "buy": "Buy",
+            "all": "All"
+        },
+        "results": {
+            "found": "Properties Found",
+            "noResults": "No Properties Found",
+            "tryAdjusting": "Try adjusting your filters to see more results",
+            "clearFilters": "Clear All Filters",
+            "loading": "Loading properties..."
+        }
+    },
+    "propertyDetails": {
+        "notFound": "Property not found",
+        "backToListings": "Back to listings",
+        "available": "Available",
+        "about": "About This Property",
+        "location": "Location",
+        "mapPlaceholder": "Interactive map would go here",
+        "features": "Features & Amenities",
+        "details": "Property Details",
+        "monthlyRent": "Monthly Rent",
+        "askingPrice": "Asking Price",
+        "month": "month",
+        "rentalTerms": "Rental Terms",
+        "securityDeposit": "Security Deposit",
+        "minimumLease": "Minimum Lease",
+        "noticePeriod": "Notice Period",
+        "12months": "12 months",
+        "2months": "2 months",
+        "contact": {
+            "title": "Contact Owner",
+            "call": "Call",
+            "email": "Email",
+            "whatsapp": "WhatsApp"
+        }
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "welcome": "Welcome back",
+        "stats": {
+            "totalProperties": "Total Properties",
+            "activeListings": "Active Listings",
+            "totalViews": "Total Views",
+            "totalLeads": "Total Leads"
+        },
+        "myProperties": "My Properties",
+        "addProperty": "Add New Property",
+        "noProperties": "You haven't listed any properties yet.",
+        "status": {
+            "pending": "Pending Review",
+            "published": "Published",
+            "rejected": "Rejected"
+        },
+        "actions": {
+            "edit": "Edit",
+            "delete": "Delete",
+            "view": "View"
+        }
+    },
+    "auth": {
+        "signin": {
+            "title": "Sign in to your account",
+            "subtitle": "Welcome back! Please enter your details.",
+            "email": "Email Address",
+            "emailPlaceholder": "you@example.com",
+            "password": "Password",
+            "passwordPlaceholder": "Enter your password",
+            "rememberMe": "Remember me",
+            "forgotPassword": "Forgot password?",
+            "button": "Sign In",
+            "loading": "Signing In...",
+            "noAccount": "Don't have an account?",
+            "signup": "Sign up for free",
+            "orContinueWith": "Or continue with"
+        },
+        "signup": {
+            "title": "Create an account",
+            "subtitle": "Start your journey with us today.",
+            "fullName": "Full Name",
+            "namePlaceholder": "John Doe",
+            "email": "Email Address",
+            "emailPlaceholder": "you@example.com",
+            "password": "Password",
+            "passwordPlaceholder": "Create a password",
+            "confirmPassword": "Confirm Password",
+            "confirmPasswordPlaceholder": "Confirm your password",
+            "phone": "Phone Number",
+            "phonePlaceholder": "+971 50 000 0000",
+            "button": "Sign Up",
+            "loading": "Creating Account...",
+            "hasAccount": "Already have an account?",
+            "signin": "Sign in",
+            "orContinueWith": "Or continue with",
+            "agreeTo": "I agree to the"
+        }
+    },
+    "profile": {
+        "title": "My Profile",
+        "signOut": "Sign Out",
+        "personalInfo": "Personal Information",
+        "fullName": "Full Name",
+        "phoneNumber": "Phone Number",
+        "whatsapp": "WhatsApp",
+        "iAmA": "I am a",
+        "owner": "Owner",
+        "renter": "Renter",
+        "broker": "Broker",
+        "saveChanges": "Save Changes",
+        "saving": "Saving...",
+        "updateSuccess": "Profile updated successfully!",
+        "user": "User"
+    },
+    "verify": {
+        "title": "Check Your Email",
+        "message": "We've sent a verification link to your email address. Please click the link to verify your account.",
+        "backToSignIn": "Back to Sign In",
+        "didntReceive": "Didn't receive the email?",
+        "checkSpam": "Check your spam folder"
+    },
+    "card": {
+        "viewDetails": "View Details",
+        "featured": "Featured",
+        "month": "month",
+        "listings": "listings",
+        "phone": "Phone",
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "chatOnWhatsApp": "Chat on WhatsApp",
+        "sendEmail": "Send Email",
+        "callNow": "Call Now",
+        "verifiedProfessional": "Verified Professional",
+        "verifiedBy": "This agent has been verified and trusted by OwnersDirect"
+    },
+    "admin": {
+        "title": "Admin Dashboard",
+        "overview": "Overview",
+        "users": "Users",
+        "properties": "Properties",
+        "allProperties": "All Properties",
+        "stats": {
+            "totalUsers": "Total Users",
+            "pendingProperties": "Pending Properties",
+            "publishedProperties": "Published Properties"
+        },
+        "usersTable": {
+            "name": "Name",
+            "email": "Email",
+            "role": "Role",
+            "verified": "Verified",
+            "joinDate": "Join Date",
+            "actions": "Actions",
+            "changeRole": "Change Role",
+            "toggleVerification": "Toggle Verification",
+            "yes": "Yes",
+            "no": "No"
+        },
+        "propertiesTable": {
+            "title": "Title",
+            "owner": "Owner",
+            "type": "Type",
+            "price": "Price",
+            "status": "Status",
+            "submitted": "Submitted",
+            "actions": "Actions",
+            "approve": "Approve",
+            "reject": "Reject",
+            "viewDetails": "View Details"
+        },
+        "filters": {
+            "all": "All",
+            "pending": "Pending",
+            "published": "Published",
+            "rejected": "Rejected",
+            "search": "Search..."
+        },
+        "messages": {
+            "roleUpdated": "User role updated successfully",
+            "verificationToggled": "User verification status updated",
+            "propertyApproved": "Property approved successfully",
+            "propertyRejected": "Property rejected",
+            "error": "An error occurred",
+            "unauthorized": "Unauthorized access"
+        }
+    },
+    "notFound": {
+        "title": "Page Not Found",
+        "description": "The page you're looking for doesn't exist or has been moved. Let's get you back on track.",
+        "backHome": "Back to Home",
+        "browseProperties": "Browse Properties"
+    },
+    "about": {
+        "hero": {
+            "title": "About OwnersDirect",
+            "subtitle": "Connecting property owners directly with renters and buyers, eliminating middlemen and creating transparent real estate transactions."
+        },
+        "story": {
+            "title": "Our Story",
+            "paragraph1": "At OwnersDirect, we recognize the power of the internet in connecting people directly. Gone are the days when a middleperson was needed to link a supplier with a consumer, a farmer with a restaurant, or even a bride with a groom. So why should property agents still collect thousands — even millions — just for standing between two parties of a transaction?",
+            "paragraph2": "OwnersDirect was created to challenge that status quo. We are the UAE's first direct owner-to-buyer property marketplace, built on trust, transparency, and simplicity. Our bilingual platform (English/Arabic) allows verified owners to list their properties confidently, while buyers and renters can connect directly with them — without agents, commissions, or hidden costs.",
+            "paragraph3": "Every listing is backed by ID and proof of ownership, ensuring credibility and peace of mind for all users. We believe real estate should be straightforward: just owners and buyers, connected."
+        },
+        "mission": {
+            "title": "What We Provide",
+            "description": "OwnersDirect.ae was created in the UAE to serve the UAE. Our bilingual platform (EN/AR) reflects the cultural and professional diversity of the region, ensuring trust and ease for both citizens and residents."
+        },
+        "values": {
+            "trust": {
+                "title": "Verified Owners",
+                "description": "Identity and property documents checked for every listing."
+            },
+            "community": {
+                "title": "Secure Interactions",
+                "description": "OTP verification, standardized listings, and active moderation."
+            },
+            "transparency": {
+                "title": "Transparency",
+                "description": "No middlemen, no commissions, no inflated costs."
+            },
+            "innovation": {
+                "title": "Smart Search",
+                "description": "Filter by area, property type, bedrooms, and price with ease."
+            }
+        },
+        "stats": {
+            "users": "Active Users",
+            "properties": "Listed Properties",
+            "cities": "Cities Covered"
+        }
+    },
+    "legal": {
+        "hero": {
+            "title": "Legal Information",
+            "subtitle": "Our commitment to transparency and your rights"
+        },
+        "tabs": {
+            "terms": "Terms of Service",
+            "privacy": "Privacy Policy"
+        },
+        "lastUpdated": "Last Updated",
+        "terms": {
+            "title": "Terms & Conditions",
+            "section1": {
+                "title": "1. Acceptance",
+                "content": "By accessing OwnersDirect.ae, you agree to these Terms of Use."
+            },
+            "section2": {
+                "title": "2. Purpose",
+                "content": "OwnersDirect.ae is an early-access MVP marketplace connecting property owners directly with buyers and renters. We are not a broker or agent. All transactions occur directly between users."
+            },
+            "section3": {
+                "title": "3. Verification",
+                "content": "Owners must provide identification and property details. Buyers must verify identity and confirm they are not brokers. OwnersDirect.ae moderates listings but does not guarantee accuracy of information."
+            },
+            "section4": {
+                "title": "4. No Guarantees",
+                "content": "Information on this site is provided 'as is.' We make no warranties regarding accuracy, completeness, or availability."
+            },
+            "section5": {
+                "title": "5. Limitation of Liability",
+                "content": "To the maximum extent permitted by UAE law, OwnersDirect.ae is not liable for losses, damages, or disputes arising from use of this platform."
+            },
+            "section6": {
+                "title": "6. User Conduct",
+                "content": "Users must not upload illegal, offensive, or misleading content. OwnersDirect.ae reserves the right to remove content or suspend users at its discretion."
+            },
+            "section7": {
+                "title": "7. Privacy",
+                "content": "We collect and store user data as described in our Privacy Policy."
+            },
+            "section8": {
+                "title": "8. Changes",
+                "content": "We may update these Terms at any time by posting a revised version. Continued use of the site indicates acceptance."
+            },
+            "section9": {
+                "title": "9. Governing Law",
+                "content": "These Terms are governed by the laws of the United Arab Emirates."
+            },
+            "section10": {
+                "title": "10. Contact",
+                "content": "For support or inquiries: hello@ownersdirect.ae"
+            }
+        },
+        "privacy": {
+            "title": "Privacy Policy",
+            "section1": {
+                "title": "1. Information We Collect",
+                "content": "We collect only the information you provide through forms (name, email, phone, property details) and basic technical logs (IP address, browser type) for security."
+            },
+            "section2": {
+                "title": "2. How We Use Data",
+                "content": "Data is used to verify users, display listings, facilitate buyer-seller contact, and improve platform services."
+            },
+            "section3": {
+                "title": "3. Data Sharing",
+                "content": "We do not sell or trade your data. Data may be shared only with service providers (e.g., hosting, email) under strict confidentiality."
+            },
+            "section4": {
+                "title": "4. Retention",
+                "content": "We keep your data only as long as necessary to provide services or as required by UAE law."
+            },
+            "section5": {
+                "title": "5. Security",
+                "content": "We apply technical and administrative safeguards (encryption, access controls) to protect your data."
+            },
+            "section6": {
+                "title": "6. Your Rights",
+                "content": "You may request access, correction, or deletion of your data by contacting hello@ownersdirect.ae."
+            },
+            "section7": {
+                "title": "7. Changes",
+                "content": "We may revise this Privacy Policy. Updates will be posted on this page."
+            },
+            "section8": {
+                "title": "8. Contact",
+                "content": "For questions about privacy, contact hello@ownersdirect.ae."
+            }
+        }
+    },
+    "propertyForm": {
+        "createTitle": "List Your Property",
+        "createSubtitle": "Fill in the details below to list your property on OwnersDirect. Reach thousands of potential buyers and renters directly.",
+        "editTitle": "Edit Property",
+        "sections": {
+            "basic": "Basic Information",
+            "location": "Location",
+            "details": "Property Details",
+            "amenities": "Amenities",
+            "images": "Images",
+            "documents": "Documents"
+        },
+        "fields": {
+            "title": "Property Title",
+            "description": "Description",
+            "price": "Price",
+            "type": "Listing Type",
+            "propertyType": "Property Type",
+            "bedrooms": "Bedrooms",
+            "bathrooms": "Bathrooms",
+            "size": "Size (sqft)",
+            "parking": "Parking Spots",
+            "yearBuilt": "Year Built",
+            "furnished": "Furnishing",
+            "availableFrom": "Available From",
+            "idDocument": "ID Document",
+            "ownershipDocument": "Ownership Proof",
+            "emirate": "Emirate",
+            "community": "Community"
+        },
+        "placeholders": {
+            "title": "e.g. Modern Luxury Villa with Ocean View",
+            "description": "Describe your property in detail...",
+            "amenity": "Add amenity (e.g. WiFi, Pool, Parking)",
+            "selectEmirate": "Select Emirate",
+            "searchArea": "Search areas in",
+            "selectEmirateFirst": "Select an Emirate first"
+        },
+        "options": {
+            "furnished": {
+                "fully": "Fully Furnished",
+                "semi": "Semi Furnished",
+                "unfurnished": "Unfurnished"
+            }
+        },
+        "buttons": {
+            "create": "Create Listing",
+            "update": "Update Listing",
+            "cancel": "Cancel",
+            "uploading": "Uploading...",
+            "uploadId": "Upload ID",
+            "uploadProof": "Upload Proof",
+            "uploadImages": "Click to upload images",
+            "add": "Add"
+        },
+        "hints": {
+            "pdfOrImage": "PDF or Image",
+            "images": "JPG, PNG, WebP up to 5MB"
+        },
+        "status": {
+            "uploaded": "Document Uploaded",
+            "noImages": "No images added yet",
+            "noAmenities": "No amenities added yet",
+            "creating": "Creating Listing..."
+        }
+    },
+    "hottest": {
+        "badge": "Hottest Deals",
+        "title": "Featured",
+        "subtitle": "Properties",
+        "description": "Explore our handpicked selection of premium properties in prime locations",
+        "viewAll": "View All Properties",
+        "noProperties": "No properties found. Be the first to list one!"
+    },
+    "testimonials": {
+        "badge": "Testimonials",
+        "title": "What Our",
+        "subtitle": "Clients Say",
+        "description": "Join thousands of satisfied clients who found their perfect property with us",
+        "stats": {
+            "rating": "Average Rating",
+            "clients": "Happy Clients",
+            "sold": "Properties Sold",
+            "satisfaction": "Satisfaction Rate"
+        }
+    },
+    "about2": {
+        "title": "Why Choose",
+        "subtitle": "OwnersDirect",
+        "description": "We're revolutionizing real estate by connecting property owners directly with buyers and renters, eliminating unnecessary middlemen and saving you time and money.",
+        "trustedPartner": "Your Trusted Partner in Real Estate",
+        "history": "Since 2009, OwnersDirect has been the leading platform connecting property owners directly with buyers and renters. We've helped thousands of people find their perfect space while saving them significant costs.",
+        "mission": "Our mission is simple: make real estate transactions transparent, efficient, and accessible to everyone. No complicated processes, no hidden fees—just honest, direct connections between property owners and seekers.",
+        "features": {
+            "verified": {
+                "title": "Verified Listings",
+                "desc": "Every property is thoroughly verified to ensure authenticity and quality standards."
+            },
+            "expert": {
+                "title": "Expert Guidance",
+                "desc": "Professional real estate experts available 24/7 to assist with your property journey."
+            },
+            "community": {
+                "title": "Trusted Community",
+                "desc": "Join thousands of satisfied clients who found their dream properties with us."
+            },
+            "insights": {
+                "title": "Market Insights",
+                "desc": "Access real-time market data and trends to make informed investment decisions."
+            },
+            "quick": {
+                "title": "Quick Process",
+                "desc": "Streamlined procedures and paperwork to get you into your property faster."
+            },
+            "transparent": {
+                "title": "Transparent Deals",
+                "desc": "No hidden fees or surprises. Complete transparency in all transactions."
+            }
+        },
+        "stats": {
+            "connections": "Direct owner connections",
+            "savings": "Cost savings vs traditional agents",
+            "time": "Average time to close deal"
+        }
+    },
+    "contact": {
+        "badge": "Get In Touch",
+        "title": "Let's",
+        "subtitle": "Connect",
+        "description": "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+        "info": {
+            "phone": "Phone",
+            "email": "Email",
+            "office": "Office"
+        },
+        "followUs": "Follow Us",
+        "form": {
+            "name": "Full Name",
+            "email": "Email Address",
+            "phone": "Phone Number",
+            "subject": "Subject",
+            "message": "Message",
+            "submit": "Send Message",
+            "placeholders": {
+                "name": "John Doe",
+                "email": "john@example.com",
+                "phone": "+1 (555) 000-0000",
+                "subject": "Property Inquiry",
+                "message": "Tell us about your requirements..."
+            }
+        }
+    },
+    "footer": {
+        "description": "Your trusted partner in finding the perfect property. We connect owners directly with buyers and renters, making real estate simple and transparent.",
+        "subscribe": "Subscribe to our newsletter",
+        "emailPlaceholder": "Enter your email",
+        "company": "Company",
+        "properties": "Properties",
+        "legal": "Legal",
+        "support": "Support",
+        "links": {
+            "about": "About Us",
+            "careers": "Careers",
+            "press": "Press",
+            "blog": "Blog",
+            "buy": "Buy Property",
+            "rent": "Rent Property",
+            "commercial": "Commercial",
+            "list": "List Property",
+            "help": "Help Center",
+            "contact": "Contact Us",
+            "privacy": "Privacy Policy",
+            "terms": "Terms of Service",
+            "cookie": "Cookie Policy"
+        },
+        "contact": {
+            "call": "Call Us",
+            "email": "Email Us",
+            "visit": "Visit Us"
+        },
+        "rights": "All rights reserved."
+    }
+}

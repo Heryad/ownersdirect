@@ -5,7 +5,8 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
 export async function getProperties(filters?: {
-    city?: string;
+    emirate?: string;
+    community?: string;
     type?: string;
     propertyType?: string;
     minPrice?: number;
@@ -31,10 +32,16 @@ export async function getProperties(filters?: {
     `)
         .order('created_at', { ascending: false })
 
+    // Only show published properties by default
+    // In a real app, we might want to allow admins or owners to see their own pending properties here
+    // But for the public listing, it should be published only.
+    query = query.eq('is_published', true)
+
     if (filters) {
-        if (filters.city) query = query.ilike('location', `%${filters.city}%`)
+        if (filters.emirate) query = query.eq('emirate', filters.emirate)
+        if (filters.community) query = query.ilike('community', `%${filters.community}%`)
         if (filters.type && filters.type !== 'all') query = query.eq('type', filters.type)
-        if (filters.propertyType) query = query.eq('property_type', filters.propertyType)
+        if (filters.propertyType) query = query.ilike('property_type', filters.propertyType)
         if (filters.minPrice) query = query.gte('price', filters.minPrice)
         if (filters.maxPrice) query = query.lte('price', filters.maxPrice)
         if (filters.bedrooms) query = query.gte('bedrooms', filters.bedrooms)
@@ -93,10 +100,12 @@ export async function createProperty(formData: FormData) {
     const description = formData.get('description') as string
     const price = parseFloat(formData.get('price') as string)
     const type = formData.get('type') as 'rent' | 'sell'
-    const location = formData.get('location') as string
+    const emirate = formData.get('emirate') as string
+    const areaVal = formData.get('area') as string
+
     const bedrooms = parseInt(formData.get('bedrooms') as string)
     const bathrooms = parseInt(formData.get('bathrooms') as string)
-    const area = parseFloat(formData.get('area') as string)
+    const areaSize = parseFloat(formData.get('area') as string)
     const parking = parseInt(formData.get('parking') as string)
     const propertyType = formData.get('propertyType') as string
     const yearBuilt = parseInt(formData.get('yearBuilt') as string)
@@ -128,6 +137,8 @@ export async function createProperty(formData: FormData) {
     const idDocument = formData.get('idDocument') as string
     const ownershipDocument = formData.get('ownershipDocument') as string
 
+    const locationCombined = `${areaVal}, ${emirate}`
+
     const { error } = await supabase
         .from('properties')
         .insert({
@@ -136,10 +147,12 @@ export async function createProperty(formData: FormData) {
             description,
             price,
             type,
-            location,
+            location: locationCombined, // Use the combined location
+            emirate,
+            community: areaVal, // Store the location area string in 'community' column
             bedrooms,
             bathrooms,
-            area,
+            area: areaSize, // Store the size (sqft) in 'area' column
             parking,
             property_type: propertyType,
             year_built: yearBuilt,
@@ -148,7 +161,9 @@ export async function createProperty(formData: FormData) {
             amenities,
             images,
             id_document: idDocument,
-            ownership_document: ownershipDocument
+            ownership_document: ownershipDocument,
+            status: 'pending',
+            is_published: false
         })
 
     if (error) {
@@ -217,7 +232,7 @@ export async function updateProperty(id: string, formData: FormData) {
     const location = formData.get('location') as string
     const bedrooms = parseInt(formData.get('bedrooms') as string)
     const bathrooms = parseInt(formData.get('bathrooms') as string)
-    const area = parseFloat(formData.get('area') as string)
+    const areaSize = parseFloat(formData.get('area') as string)
     const parking = parseInt(formData.get('parking') as string)
     const propertyType = formData.get('propertyType') as string
     const yearBuilt = parseInt(formData.get('yearBuilt') as string)
@@ -242,25 +257,39 @@ export async function updateProperty(id: string, formData: FormData) {
         if (imagesRaw) images = imagesRaw.split(',').map(s => s.trim())
     }
 
+    const emirate = formData.get('emirate') as string
+    const areaVal = formData.get('area') as string
+
+    // If we have new location fields, construct the location string
+    let locationToUpdate = location;
+    if (emirate && areaVal) {
+        locationToUpdate = `${areaVal}, ${emirate}`;
+    }
+
+    const updateData: any = {
+        title,
+        description,
+        price,
+        type,
+        location: locationToUpdate,
+        bedrooms,
+        bathrooms,
+        area: areaSize,
+        parking,
+        property_type: propertyType,
+        year_built: yearBuilt,
+        available_from: availableFrom,
+        furnished,
+        amenities,
+        images
+    }
+
+    if (emirate) updateData.emirate = emirate;
+    if (areaVal) updateData.community = areaVal;
+
     const { error } = await supabase
         .from('properties')
-        .update({
-            title,
-            description,
-            price,
-            type,
-            location,
-            bedrooms,
-            bathrooms,
-            area,
-            parking,
-            property_type: propertyType,
-            year_built: yearBuilt,
-            available_from: availableFrom,
-            furnished,
-            amenities,
-            images
-        })
+        .update(updateData)
         .eq('id', id)
         .eq('owner_id', user.id)
 

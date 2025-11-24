@@ -9,9 +9,11 @@ import { getProfile, updateProfile } from '@/actions/profile';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { signout } from '@/actions/auth';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function ProfilePage() {
     const router = useRouter();
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -63,7 +65,7 @@ export default function ProfilePage() {
         if (result?.error) {
             setMessage({ type: 'error', text: result.error });
         } else {
-            setMessage({ type: 'success', text: 'Profile updated successfully!' });
+            setMessage({ type: 'success', text: t('profile.updateSuccess') });
             // Refresh profile data to get new avatar URL if uploaded
             loadProfile();
         }
@@ -94,13 +96,13 @@ export default function ProfilePage() {
                         transition={{ duration: 0.5 }}
                     >
                         <div className="flex items-center justify-between mb-8">
-                            <h1 className="text-3xl font-bold text-slate-900">My Profile</h1>
+                            <h1 className="text-3xl font-bold text-slate-900">{t('profile.title')}</h1>
                             <button
                                 onClick={handleSignOut}
                                 className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                             >
                                 <LogOut className="w-5 h-5" />
-                                Sign Out
+                                {t('profile.signOut')}
                             </button>
                         </div>
 
@@ -121,10 +123,10 @@ export default function ProfilePage() {
                                             <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
                                         </label>
                                     </div>
-                                    <h2 className="text-xl font-bold text-slate-900 mb-1">{profile?.full_name || 'User'}</h2>
+                                    <h2 className="text-xl font-bold text-slate-900 mb-1">{profile?.full_name || t('profile.user')}</h2>
                                     <p className="text-slate-500 text-sm mb-4">{profile?.email}</p>
                                     <div className="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-sm font-medium capitalize">
-                                        {profile?.role || 'User'}
+                                        {profile?.role ? t(`profile.${profile.role}`) : t('profile.user')}
                                     </div>
                                 </div>
 
@@ -135,7 +137,7 @@ export default function ProfilePage() {
                             <div className="md:col-span-2">
                                 <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                                     <div className="p-6 border-b border-slate-200">
-                                        <h3 className="text-lg font-bold text-slate-900">Personal Information</h3>
+                                        <h3 className="text-lg font-bold text-slate-900">{t('profile.personalInfo')}</h3>
                                     </div>
 
                                     <form action={handleSubmit} className="p-6 space-y-6">
@@ -150,46 +152,46 @@ export default function ProfilePage() {
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="md:col-span-2">
-                                                <label className="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-2">{t('profile.fullName')}</label>
                                                 <div className="relative">
                                                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                     <input
                                                         name="fullName"
                                                         defaultValue={profile?.full_name || ''}
                                                         className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                                                        placeholder="John Doe"
+                                                        placeholder={t('auth.signup.namePlaceholder')}
                                                     />
                                                 </div>
                                             </div>
 
                                             <div>
-                                                <label className="block text-sm font-semibold text-slate-700 mb-2">Phone Number</label>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-2">{t('profile.phoneNumber')}</label>
                                                 <div className="relative">
                                                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                     <input
                                                         name="phone"
                                                         defaultValue={profile?.phone || ''}
                                                         className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                                                        placeholder="+1 (555) 000-0000"
+                                                        placeholder={t('auth.signup.phonePlaceholder')}
                                                     />
                                                 </div>
                                             </div>
 
                                             <div>
-                                                <label className="block text-sm font-semibold text-slate-700 mb-2">WhatsApp</label>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-2">{t('profile.whatsapp')}</label>
                                                 <div className="relative">
                                                     <MessageCircle className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                                     <input
                                                         name="whatsapp"
                                                         defaultValue={profile?.whatsapp || ''}
                                                         className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
-                                                        placeholder="+1 (555) 000-0000"
+                                                        placeholder={t('auth.signup.phonePlaceholder')}
                                                     />
                                                 </div>
                                             </div>
 
                                             <div className="md:col-span-2">
-                                                <label className="block text-sm font-semibold text-slate-700 mb-2">I am a</label>
+                                                <label className="block text-sm font-semibold text-slate-700 mb-2">{t('profile.iAmA')}</label>
                                                 <div className="grid grid-cols-3 gap-4">
                                                     {['owner', 'renter', 'broker'].map((role) => (
                                                         <label key={role} className="cursor-pointer">
@@ -201,7 +203,7 @@ export default function ProfilePage() {
                                                                 className="peer hidden"
                                                             />
                                                             <div className="text-center py-3 px-4 rounded-lg border border-slate-200 peer-checked:bg-indigo-50 peer-checked:border-indigo-500 peer-checked:text-indigo-700 hover:bg-slate-50 transition-all capitalize font-medium">
-                                                                {role}
+                                                                {t(`profile.${role}`)}
                                                             </div>
                                                         </label>
                                                     ))}
@@ -220,12 +222,12 @@ export default function ProfilePage() {
                                                 {saving ? (
                                                     <>
                                                         <Loader2 className="w-5 h-5 animate-spin" />
-                                                        Saving...
+                                                        {t('profile.saving')}
                                                     </>
                                                 ) : (
                                                     <>
                                                         <Save className="w-5 h-5" />
-                                                        Save Changes
+                                                        {t('profile.saveChanges')}
                                                     </>
                                                 )}
                                             </motion.button>

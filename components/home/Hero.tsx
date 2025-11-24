@@ -1,21 +1,40 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Home, Building2, Warehouse, Hotel } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/components/providers/LanguageProvider';
+import uaeLocations from '@/lib/data/uae-locations.json';
 
 const Hero = () => {
   const router = useRouter();
+  const { t } = useLanguage();
   const [searchData, setSearchData] = useState({
-    city: '',
+    emirate: '',
+    community: '',
     propertyType: 'rent',
     category: '',
   });
+  const [showAreaSuggestions, setShowAreaSuggestions] = useState(false);
+  const [filteredAreas, setFilteredAreas] = useState<string[]>([]);
+  const areaInputRef = useRef<HTMLInputElement>(null);
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (areaInputRef.current && !areaInputRef.current.contains(event.target as Node)) {
+        setShowAreaSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (searchData.city) params.append('location', searchData.city);
+    if (searchData.emirate) params.append('emirate', searchData.emirate);
+    if (searchData.community) params.append('community', searchData.community);
     if (searchData.propertyType) params.append('type', searchData.propertyType);
     if (searchData.category) params.append('propertyType', searchData.category);
 
@@ -23,11 +42,11 @@ const Hero = () => {
   };
 
   const propertyCategories = [
-    { value: 'Apartment', label: 'Apartment', icon: Building2 },
-    { value: 'Villa', label: 'Villa', icon: Home },
-    { value: 'Office', label: 'Office', icon: Building2 },
-    { value: 'Commercial', label: 'Commercial', icon: Warehouse },
-    { value: 'Penthouse', label: 'Penthouse', icon: Hotel },
+    { value: 'Apartment', label: t('hero.categories.apartment'), icon: Building2 },
+    { value: 'Villa', label: t('hero.categories.villa'), icon: Home },
+    { value: 'Office', label: t('hero.categories.office'), icon: Building2 },
+    { value: 'Commercial', label: t('hero.categories.commercial'), icon: Warehouse },
+    { value: 'Penthouse', label: t('hero.categories.penthouse'), icon: Hotel },
   ];
 
   const containerVariants = {
@@ -69,16 +88,16 @@ const Hero = () => {
             variants={itemVariants}
             className="text-5xl md:text-7xl font-bold text-white mb-6"
           >
-            Find Your Dream
+            {t('hero.title')}
             <span className="block bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
-              Property Today
+              {t('hero.subtitle')}
             </span>
           </motion.h1>
           <motion.p
             variants={itemVariants}
             className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto"
           >
-            Discover the perfect space that matches your lifestyle from thousands of verified listings
+            {t('hero.description')}
           </motion.p>
         </motion.div>
 
@@ -95,46 +114,97 @@ const Hero = () => {
               <button
                 onClick={() => setSearchData({ ...searchData, propertyType: 'rent' })}
                 className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${searchData.propertyType === 'rent'
-                    ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
               >
-                Rent
+                {t('hero.rent')}
               </button>
               <button
                 onClick={() => setSearchData({ ...searchData, propertyType: 'sell' })}
                 className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${searchData.propertyType === 'sell'
-                    ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
               >
-                Buy
+                {t('hero.buy')}
               </button>
             </div>
 
             {/* Search Form */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              {/* City Input */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              {/* Emirate Dropdown */}
               <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10 rtl:left-auto rtl:right-4" />
+                <select
+                  value={searchData.emirate}
+                  onChange={(e) => {
+                    setSearchData({ ...searchData, emirate: e.target.value, community: '' });
+                    setFilteredAreas(e.target.value ? uaeLocations[e.target.value as keyof typeof uaeLocations] || [] : []);
+                  }}
+                  className="w-full pl-12 pr-4 rtl:pl-4 rtl:pr-12 py-4 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer"
+                >
+                  <option value="">{t('hero.selectEmirate') || 'Select Emirate'}</option>
+                  {Object.keys(uaeLocations).map((emirate) => (
+                    <option key={emirate} value={emirate}>{emirate}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Community Autocomplete */}
+              <div className="relative" ref={areaInputRef as any}>
+                <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none rtl:left-auto rtl:right-4" />
                 <input
                   type="text"
-                  placeholder="Enter city or location"
-                  value={searchData.city}
-                  onChange={(e) => setSearchData({ ...searchData, city: e.target.value })}
-                  className="w-full pl-12 pr-4 py-4 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600"
+                  placeholder={t('hero.searchPlaceholder') || 'Community / Area'}
+                  value={searchData.community}
+                  onChange={(e) => {
+                    setSearchData({ ...searchData, community: e.target.value });
+                    setShowAreaSuggestions(true);
+                  }}
+                  onFocus={() => setShowAreaSuggestions(true)}
+                  disabled={!searchData.emirate}
+                  className="w-full pl-12 pr-4 rtl:pl-4 rtl:pr-12 py-4 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-slate-600 disabled:bg-slate-100 disabled:cursor-not-allowed"
                 />
+
+                {/* Suggestions Dropdown */}
+                <AnimatePresence>
+                  {showAreaSuggestions && searchData.emirate && filteredAreas.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                    >
+                      {filteredAreas
+                        .filter(area => area.toLowerCase().includes(searchData.community.toLowerCase()))
+                        .map((suggestion) => (
+                          <button
+                            key={suggestion}
+                            type="button"
+                            onClick={() => {
+                              setSearchData({ ...searchData, community: suggestion });
+                              setShowAreaSuggestions(false);
+                            }}
+                            className="w-full text-left px-4 py-3 hover:bg-indigo-50 text-slate-700 transition-colors flex items-center justify-between"
+                          >
+                            <span>{suggestion}</span>
+                          </button>
+                        ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Category Dropdown */}
               <div className="relative">
-                <Home className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10" />
+                <Home className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10 rtl:left-auto rtl:right-4" />
                 <select
                   value={searchData.category}
                   onChange={(e) => setSearchData({ ...searchData, category: e.target.value })}
-                  className="w-full pl-12 pr-4 py-4 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer"
+                  className="w-full pl-12 pr-4 rtl:pl-4 rtl:pr-12 py-4 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all appearance-none bg-white cursor-pointer"
                 >
-                  <option value="">Property Type</option>
+                  <option value="">{t('hero.propertyType')}</option>
                   {propertyCategories.map((cat) => (
                     <option key={cat.value} value={cat.value}>
                       {cat.label}
@@ -151,13 +221,13 @@ const Hero = () => {
                 className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-4 rounded-lg font-semibold shadow-lg shadow-indigo-500/50 hover:shadow-indigo-500/75 transition-all duration-300 flex items-center justify-center gap-2"
               >
                 <Search className="w-5 h-5" />
-                Search Properties
+                {t('hero.searchButton')}
               </motion.button>
             </div>
 
             {/* Quick Category Icons */}
             <div className="flex flex-wrap gap-3 pt-6 border-t border-slate-200">
-              <span className="text-sm text-slate-600 font-medium mr-2">Quick search:</span>
+              <span className="text-sm text-slate-600 font-medium mr-2">{t('hero.quickSearch')}</span>
               {propertyCategories.map((cat) => (
                 <motion.button
                   key={cat.value}
@@ -165,11 +235,10 @@ const Hero = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setSearchData({ ...searchData, category: cat.value });
-                    // Optional: Auto-search on click or just set state
                   }}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${searchData.category === cat.value
-                      ? 'bg-indigo-100 text-indigo-700 border-2 border-indigo-300'
-                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-2 border-transparent'
+                    ? 'bg-indigo-100 text-indigo-700 border-2 border-indigo-300'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-2 border-transparent'
                     }`}
                 >
                   <cat.icon className="w-4 h-4" />
@@ -188,10 +257,10 @@ const Hero = () => {
           className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16"
         >
           {[
-            { label: 'Properties', value: '10K+' },
-            { label: 'Happy Clients', value: '5K+' },
-            { label: 'Cities', value: '50+' },
-            { label: 'Years Experience', value: '15+' },
+            { label: t('hero.stats.properties'), value: '10K+' },
+            { label: t('hero.stats.clients'), value: '5K+' },
+            { label: t('hero.stats.cities'), value: '50+' },
+            { label: t('hero.stats.experience'), value: '15+' },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}

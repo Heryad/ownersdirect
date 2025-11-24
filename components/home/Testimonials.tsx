@@ -2,8 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 const Testimonials = () => {
+  const { t } = useLanguage();
   const testimonials = [
     {
       id: 1,
@@ -68,13 +70,13 @@ const Testimonials = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white text-indigo-700 rounded-full font-semibold text-sm mb-4 shadow-lg">
             <Star className="w-4 h-4 fill-indigo-600" />
-            Testimonials
+            {t('testimonials.badge')}
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
-            What Our <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Clients Say</span>
+            {t('testimonials.title')} <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">{t('testimonials.subtitle')}</span>
           </h2>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-            Join thousands of satisfied clients who found their perfect property with us
+            {t('testimonials.description')}
           </p>
         </motion.div>
 
@@ -91,7 +93,7 @@ const Testimonials = () => {
               className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-200"
             >
               {/* Quote Icon */}
-              <div className="absolute top-6 right-6 opacity-10">
+              <div className="absolute top-6 right-6 opacity-10 rtl:right-auto rtl:left-6">
                 <Quote className="w-16 h-16 text-indigo-600" />
               </div>
 
@@ -115,7 +117,7 @@ const Testimonials = () => {
                     alt={testimonial.name}
                     className="w-14 h-14 rounded-full object-cover border-2 border-indigo-200"
                   />
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white rtl:right-auto rtl:-left-1"></div>
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900">{testimonial.name}</h4>
@@ -138,10 +140,10 @@ const Testimonials = () => {
           className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 pt-16 border-t border-slate-300"
         >
           {[
-            { value: '4.9/5', label: 'Average Rating' },
-            { value: '5,000+', label: 'Happy Clients' },
-            { value: '10,000+', label: 'Properties Sold' },
-            { value: '99%', label: 'Satisfaction Rate' },
+            { value: '4.9/5', label: t('testimonials.stats.rating') },
+            { value: '5,000+', label: t('testimonials.stats.clients') },
+            { value: '10,000+', label: t('testimonials.stats.sold') },
+            { value: '99%', label: t('testimonials.stats.satisfaction') },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}

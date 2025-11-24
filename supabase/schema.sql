@@ -45,6 +45,12 @@ create table properties (
   furnished text,
   images text[],
   amenities jsonb,
+  id_document text,
+  ownership_document text,
+  emirate text,
+  community text,
+  status text default 'pending' check (status in ('pending', 'published', 'rejected')),
+  is_published boolean default false,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -63,6 +69,33 @@ create policy "Owners can update their own properties." on properties
 
 create policy "Owners can delete their own properties." on properties
   for delete using ((select auth.uid()) = owner_id);
+
+-- Admin policies for profiles
+create policy "Admins can view all profiles." on profiles
+  for select using (
+    (select role from profiles where id = auth.uid()) = 'admin'
+  );
+
+create policy "Admins can update any profile." on profiles
+  for update using (
+    (select role from profiles where id = auth.uid()) = 'admin'
+  );
+
+-- Admin policies for properties
+create policy "Admins can view all properties." on properties
+  for select using (
+    (select role from profiles where id = auth.uid()) = 'admin'
+  );
+
+create policy "Admins can update any property." on properties
+  for update using (
+    (select role from profiles where id = auth.uid()) = 'admin'
+  );
+
+create policy "Admins can delete any property." on properties
+  for delete using (
+    (select role from profiles where id = auth.uid()) = 'admin'
+  );
 
 -- Set up Storage for Property Images
 insert into storage.buckets (id, name)
@@ -84,12 +117,11 @@ values ('avatars', 'avatars');
 create policy "Avatars are publicly accessible." on storage.objects
   for select using (bucket_id = 'avatars');
 
+create policy "Users can upload avatars." on storage.objects
+  for insert with check (
+    bucket_id = 'avatars' and
     (select auth.uid()) = (storage.foldername(name))[1]::uuid
   );
-
--- Add columns for documents to properties table
-alter table properties add column if not exists id_document text;
-alter table properties add column if not exists ownership_document text;
 
 -- Set up Storage for Property Documents
 insert into storage.buckets (id, name)

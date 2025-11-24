@@ -7,9 +7,11 @@ import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, EyeOff, User, Phone, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { signup } from '@/actions/auth';
 import { createClient } from '@/lib/supabase/client';
+import { useLanguage } from '@/components/providers/LanguageProvider';
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -87,8 +89,8 @@ export default function SignUpPage() {
 
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Create Account</h2>
-            <p className="text-slate-600">Join us and find your dream property</p>
+            <h2 className="text-3xl font-bold text-slate-900 mb-2">{t('auth.signup.title')}</h2>
+            <p className="text-slate-600">{t('auth.signup.subtitle')}</p>
           </div>
 
           {/* Error Message */}
@@ -108,7 +110,7 @@ export default function SignUpPage() {
             {/* Full Name */}
             <div>
               <label htmlFor="fullName" className="block text-sm font-semibold text-slate-700 mb-2">
-                Full Name
+                {t('auth.signup.fullName')}
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -118,7 +120,7 @@ export default function SignUpPage() {
                   type="text"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white placeholder:text-slate-600"
-                  placeholder="John Doe"
+                  placeholder={t('auth.signup.namePlaceholder')}
                 />
               </div>
             </div>
@@ -126,7 +128,7 @@ export default function SignUpPage() {
             {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
-                Email Address
+                {t('auth.signup.email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -136,7 +138,7 @@ export default function SignUpPage() {
                   type="email"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white placeholder:text-slate-600"
-                  placeholder="you@example.com"
+                  placeholder={t('auth.signup.emailPlaceholder')}
                 />
               </div>
             </div>
@@ -144,7 +146,7 @@ export default function SignUpPage() {
             {/* Phone */}
             <div>
               <label htmlFor="phone" className="block text-sm font-semibold text-slate-700 mb-2">
-                Phone Number
+                {t('auth.signup.phone')}
               </label>
               <div className="relative">
                 <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -154,7 +156,7 @@ export default function SignUpPage() {
                   type="tel"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white placeholder:text-slate-600"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder={t('auth.signup.phonePlaceholder')}
                 />
               </div>
             </div>
@@ -162,7 +164,7 @@ export default function SignUpPage() {
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
-                Password
+                {t('auth.signup.password')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -172,7 +174,7 @@ export default function SignUpPage() {
                   type={showPassword ? 'text' : 'password'}
                   required
                   className="w-full pl-10 pr-12 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white placeholder:text-slate-600"
-                  placeholder="Create a strong password"
+                  placeholder={t('auth.signup.passwordPlaceholder')}
                 />
                 <button
                   type="button"
@@ -187,7 +189,7 @@ export default function SignUpPage() {
             {/* Confirm Password */}
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-semibold text-slate-700 mb-2">
-                Confirm Password
+                {t('auth.signup.confirmPassword')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -197,7 +199,7 @@ export default function SignUpPage() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   required
                   className="w-full pl-10 pr-12 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-900 bg-white placeholder:text-slate-600"
-                  placeholder="Confirm your password"
+                  placeholder={t('auth.signup.confirmPasswordPlaceholder')}
                 />
                 <button
                   type="button"
@@ -219,13 +221,13 @@ export default function SignUpPage() {
                 className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 mt-1"
               />
               <label htmlFor="terms" className="text-sm text-slate-700">
-                I agree to the{' '}
+                {t('auth.signup.agreeTo')}{' '}
                 <Link href="/terms" className="text-indigo-600 hover:text-indigo-700 font-semibold">
-                  Terms of Service
+                  {t('footer.links.terms')}
                 </Link>{' '}
-                and{' '}
+                {t('common.and')}{' '}
                 <Link href="/privacy" className="text-indigo-600 hover:text-indigo-700 font-semibold">
-                  Privacy Policy
+                  {t('footer.links.privacy')}
                 </Link>
               </label>
             </div>
@@ -241,11 +243,11 @@ export default function SignUpPage() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Creating Account...
+                  {t('auth.signup.loading')}
                 </>
               ) : (
                 <>
-                  Create Account
+                  {t('auth.signup.button')}
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -258,7 +260,7 @@ export default function SignUpPage() {
               <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-slate-500">Or sign up with</span>
+              <span className="px-4 bg-white text-slate-500">{t('auth.signup.orContinueWith')}</span>
             </div>
           </div>
 
@@ -293,9 +295,9 @@ export default function SignUpPage() {
 
           {/* Sign In Link */}
           <p className="mt-6 text-center text-sm text-slate-600">
-            Already have an account?{' '}
+            {t('auth.signup.hasAccount')}{' '}
             <Link href="/auth/signin" className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors">
-              Sign in
+              {t('auth.signup.signin')}
             </Link>
           </p>
         </div>
