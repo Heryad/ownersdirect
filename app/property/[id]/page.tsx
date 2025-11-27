@@ -52,17 +52,17 @@ const mapPropertyData = (data: any) => {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const data = await getProperty(id);
+  const response = await getProperty(id);
 
-  if (!data) {
+  if (!response.property) {
     return {
       title: 'Property Not Found | OwnersDirect',
     };
   }
 
-  const title = `${data.title} | OwnersDirect`;
-  const description = `${data.bedrooms} bed, ${data.bathrooms} bath ${data.property_type} for ${data.type} in ${data.location}. ${data.description?.substring(0, 150)}...`;
-  const image = data.images?.[0] || '/og-image.jpg';
+  const title = `${response.property.title} | OwnersDirect`;
+  const description = `${response.property.bedrooms} bed, ${response.property.bathrooms} bath ${response.property.property_type} for ${response.property.type} in ${response.property.location}. ${response.property.description?.substring(0, 150)}...`;
+  const image = response.property.images?.[0] || '/og-image.jpg';
 
   return {
     title,
@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           url: image,
           width: 1200,
           height: 630,
-          alt: data.title,
+          alt: response.property.title,
         },
       ],
     },
@@ -91,7 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PropertyPage({ params }: Props) {
   const { id } = await params;
   const data = await getProperty(id);
-  const property = mapPropertyData(data);
+  const property = mapPropertyData(data.property);
 
   return <PropertyDetailsClient property={property} />;
 }

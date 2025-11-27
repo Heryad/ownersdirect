@@ -32,12 +32,12 @@ export default function EditPropertyPage() {
     const loadProperty = async () => {
         try {
             const data = await getProperty(id);
-            if (data) {
-                setProperty(data);
-                setImages(data.images || []);
-                setAmenities(data.amenities || []);
+            if (data.property) {
+                setProperty(data.property);
+                setImages(data.property.images || []);
+                setAmenities(data.property.amenities || []);
             } else {
-                setError('Property not found');
+                setError(data.error || 'Property not found');
             }
         } catch (err) {
             console.error('Error loading property:', err);
