@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Home, CheckCircle, XCircle, Loader2, Search, Shield } from 'lucide-react';
+import { Users, Home, CheckCircle, XCircle, Loader2, Search, Shield, Eye } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { useLanguage } from '@/components/providers/LanguageProvider';
@@ -97,6 +97,10 @@ export default function AdminPage() {
             setMessage({ type: 'success', text: t(`admin.messages.${messageKey}`) });
             loadData();
         }
+    };
+
+    const handleView = (propertyId: string) => {
+        router.push(`/admin/property/${propertyId}`);
     };
 
     if (loading) {
@@ -295,20 +299,26 @@ export default function AdminPage() {
                                                 </td>
                                                 <td className="px-6 py-4 text-sm text-slate-900">AED {property.price}</td>
                                                 <td className="px-6 py-4">
-                                                    <div className="flex gap-2">
-                                                        <button
-                                                            onClick={() => handlePropertyAction(property.id, 'published')}
-                                                            className="px-3 py-1 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700"
-                                                        >
-                                                            {t('admin.propertiesTable.approve')}
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handlePropertyAction(property.id, 'rejected')}
-                                                            className="px-3 py-1 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700"
-                                                        >
-                                                            {t('admin.propertiesTable.reject')}
-                                                        </button>
-                                                    </div>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => handlePropertyAction(property.id, 'published')}
+                                                        className="p-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700"
+                                                    >
+                                                        <CheckCircle className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleView(property.id)}
+                                                        className="p-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700"
+                                                    >
+                                                        <Eye className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handlePropertyAction(property.id, 'rejected')}
+                                                        className="p-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700"
+                                                    >
+                                                        <XCircle className="w-4 h-4" />
+                                                    </button>
+                                                </div>
                                                 </td>
                                             </tr>
                                         ))}

@@ -63,28 +63,36 @@ export async function getProperties(filters?: {
 export async function getProperty(id: string) {
     const supabase = await createClient()
 
-    const { data, error } = await supabase
+    const { data: property, error } = await supabase
         .from('properties')
         .select(`
-      *,
-      profiles (
-        full_name,
-        avatar_url,
-        phone,
-        whatsapp,
-        is_verified,
-        role
-      )
-    `)
+            *,
+            profiles (
+                full_name,
+                avatar_url,
+                phone,
+                whatsapp,
+                is_verified,
+                role
+            ),
+            id_document,
+            ownership_document
+        `)
         .eq('id', id)
         .single()
 
-    if (error) {
+    if (error || !property) {
         console.error('Error fetching property:', error)
-        return null
+        return { property: null, error: 'Property not found' }
     }
+    
+    const documents = [
+        { name: 'ID Document', url: property.id_document },
+        { name: 'Ownership Document', url: property.ownership_document }
+    ].filter(doc => doc.url);
 
-    return data
+
+    return { property: { ...property, documents }, error: null }
 }
 
 export async function createProperty(formData: FormData) {

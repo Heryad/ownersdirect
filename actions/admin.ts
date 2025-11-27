@@ -211,7 +211,8 @@ export async function updatePropertyStatus(propertyId: string, status: 'pending'
             status,
             is_published: status === 'published'
         })
-        .eq('id', propertyId);
+        .eq('id', propertyId)
+        .select();
 
     if (error) {
         return { error: error.message };
@@ -219,6 +220,7 @@ export async function updatePropertyStatus(propertyId: string, status: 'pending'
 
     revalidatePath('/admin');
     revalidatePath('/properties');
+    revalidatePath(`/property/${propertyId}`);
     return { success: true };
 }
 
