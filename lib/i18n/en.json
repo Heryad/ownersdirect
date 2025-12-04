@@ -14,9 +14,9 @@
         "loading": "Loading..."
     },
     "hero": {
-        "title": "Find Your Dream",
-        "subtitle": "Property Today",
-        "description": "Discover the perfect space that matches your lifestyle from thousands of verified listings",
+        "title": "Your Inclusive Property Marketplace",
+        "subtitle": "Buy, Rent, or List with No Middleman",
+        "description": "A transparent, owner-to-client platform where buyers, renters, and owners connect directly",
         "rent": "Rent",
         "buy": "Buy",
         "searchPlaceholder": "Enter city or location",
@@ -237,6 +237,7 @@
             "verificationToggled": "User verification status updated",
             "propertyApproved": "Property approved successfully",
             "propertyRejected": "Property rejected",
+            "propertyDeleted": "Property deleted successfully",
             "error": "An error occurred",
             "unauthorized": "Unauthorized access"
         }

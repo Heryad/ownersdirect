@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Home, CheckCircle, XCircle, Loader2, Search, Shield, Eye } from 'lucide-react';
+import { Users, Home, CheckCircle, XCircle, Loader2, Search, Shield, Eye, Trash2 } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { useLanguage } from '@/components/providers/LanguageProvider';
@@ -11,9 +11,11 @@ import {
     getAdminStats,
     getAllUsers,
     getPendingProperties,
+    getAllPropertiesAdmin,
     updateUserRole,
     toggleUserVerification,
-    updatePropertyStatus
+    updatePropertyStatus,
+    deletePropertyAdmin
 } from '@/actions/admin';
 import { getProfile } from '@/actions/profile';
 
@@ -25,11 +27,25 @@ export default function AdminPage() {
     const [stats, setStats] = useState({ totalUsers: 0, pendingProperties: 0, publishedProperties: 0 });
     const [users, setUsers] = useState<any[]>([]);
     const [properties, setProperties] = useState<any[]>([]);
+    const [propertyFilter, setPropertyFilter] = useState<'all' | 'pending' | 'published' | 'rejected'>('all');
     const [message, setMessage] = useState({ type: '', text: '' });
 
     useEffect(() => {
         checkAdminAccess();
     }, []);
+
+    useEffect(() => {
+        if (!loading) {
+            loadProperties();
+        }
+    }, [propertyFilter]);
+
+    const loadProperties = async () => {
+        const propertiesData = await getAllPropertiesAdmin(1, 100, propertyFilter);
+        if (!propertiesData.error) {
+            setProperties(propertiesData.properties || []);
+        }
+    };
 
     const checkAdminAccess = async () => {
         const profile = await getProfile();
@@ -56,7 +72,7 @@ export default function AdminPage() {
             setUsers(usersData.users || []);
         }
 
-        const propertiesData = await getPendingProperties();
+        const propertiesData = await getAllPropertiesAdmin(1, 100, propertyFilter);
         if (!propertiesData.error) {
             setProperties(propertiesData.properties || []);
         }
@@ -96,6 +112,20 @@ export default function AdminPage() {
             const messageKey = status === 'published' ? 'propertyApproved' : 'propertyRejected';
             setMessage({ type: 'success', text: t(`admin.messages.${messageKey}`) });
             loadData();
+        }
+    };
+
+    const handleDeleteProperty = async (propertyId: string) => {
+        if (!confirm('Are you sure you want to delete this property? This action cannot be undone.')) {
+            return;
+        }
+
+        const result = await deletePropertyAdmin(propertyId);
+        if (result.error) {
+            setMessage({ type: 'error', text: result.error });
+        } else {
+            setMessage({ type: 'success', text: t('admin.messages.propertyDeleted') });
+            loadProperties();
         }
     };
 
@@ -276,6 +306,24 @@ export default function AdminPage() {
                     {/* Properties Tab */}
                     {activeTab === 'properties' && (
                         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                            {/* Filter Buttons */}
+                            <div className="p-6 border-b border-slate-200">
+                                <div className="flex gap-2 flex-wrap">
+                                    {['all', 'pending', 'published', 'rejected'].map((filter) => (
+                                        <button
+                                            key={filter}
+                                            onClick={() => setPropertyFilter(filter as any)}
+                                            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${propertyFilter === filter
+                                                ? 'bg-indigo-600 text-white'
+                                                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                                                }`}
+                                        >
+                                            {t(`admin.filters.${filter}`)}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead className="bg-slate-50">
@@ -283,6 +331,7 @@ export default function AdminPage() {
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">{t('admin.propertiesTable.title')}</th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">{t('admin.propertiesTable.owner')}</th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">{t('admin.propertiesTable.type')}</th>
+                                            <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">{t('admin.propertiesTable.status')}</th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">{t('admin.propertiesTable.price')}</th>
                                             <th className="px-6 py-4 text-left text-sm font-semibold text-slate-900">{t('admin.propertiesTable.actions')}</th>
                                         </tr>
@@ -297,28 +346,46 @@ export default function AdminPage() {
                                                         {property.type}
                                                     </span>
                                                 </td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${property.status === 'published' ? 'bg-green-100 text-green-700' :
+                                                        property.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                                                            'bg-yellow-100 text-yellow-700'
+                                                        }`}>
+                                                        {property.status || 'pending'}
+                                                    </span>
+                                                </td>
                                                 <td className="px-6 py-4 text-sm text-slate-900">AED {property.price}</td>
                                                 <td className="px-6 py-4">
-                                                <div className="flex gap-2">
-                                                    <button
-                                                        onClick={() => handlePropertyAction(property.id, 'published')}
-                                                        className="p-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700"
-                                                    >
-                                                        <CheckCircle className="w-4 h-4" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleView(property.id)}
-                                                        className="p-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700"
-                                                    >
-                                                        <Eye className="w-4 h-4" />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handlePropertyAction(property.id, 'rejected')}
-                                                        className="p-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700"
-                                                    >
-                                                        <XCircle className="w-4 h-4" />
-                                                    </button>
-                                                </div>
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => handlePropertyAction(property.id, 'published')}
+                                                            className="p-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700"
+                                                            title="Approve"
+                                                        >
+                                                            <CheckCircle className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleView(property.id)}
+                                                            className="p-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700"
+                                                            title="View"
+                                                        >
+                                                            <Eye className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handlePropertyAction(property.id, 'rejected')}
+                                                            className="p-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700"
+                                                            title="Reject"
+                                                        >
+                                                            <XCircle className="w-4 h-4" />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteProperty(property.id)}
+                                                            className="p-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700"
+                                                            title="Delete"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}

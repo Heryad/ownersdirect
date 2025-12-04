@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Building2, Send, ArrowUp, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Send, ArrowUp, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { useState } from 'react';
 import { useLanguage } from '@/components/providers/LanguageProvider';
 import Link from 'next/link';
@@ -54,8 +54,12 @@ const Footer = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="flex items-center gap-2 mb-4">
-                  <Building2 className="w-8 h-8 text-indigo-400" />
+                <div className="flex items-center gap-3 mb-4">
+                  <img
+                    src="/logo.jpeg"
+                    alt="OwnersDirect Logo"
+                    className="h-10 w-auto object-contain"
+                  />
                   <span className="text-2xl font-bold">
                     Owners<span className="text-indigo-400">Direct</span>
                   </span>

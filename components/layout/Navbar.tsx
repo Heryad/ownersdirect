@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Building2, User, LogIn } from 'lucide-react';
+import { Menu, X, User, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/components/providers/LanguageProvider';
 import LanguageDropdown from '@/components/layout/LanguageDropdown';
@@ -61,14 +61,15 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/">
             <motion.div
-              className="flex items-center gap-2 group cursor-pointer"
+              className="flex items-center gap-3 group cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <div className="relative">
-                <Building2 className="w-8 h-8 text-indigo-600" />
-                <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-200"></div>
-              </div>
+              <img
+                src="/logo.jpeg"
+                alt="OwnersDirect Logo"
+                className="h-12 w-auto object-contain"
+              />
               <span className="text-xl font-bold text-slate-900">
                 Owners<span className="text-indigo-600">Direct</span>
               </span>
