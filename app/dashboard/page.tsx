@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Edit, Trash2, Eye, MessageSquare, Home, Loader2, AlertCircle } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, MessageSquare, Home, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
-import { getUserProperties, deleteProperty } from '@/actions/properties';
+import { getUserProperties, deleteProperty, toggleSoldStatus } from '@/actions/properties';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/providers/LanguageProvider';
 
@@ -16,6 +16,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [properties, setProperties] = useState<any[]>([]);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [togglingId, setTogglingId] = useState<string | null>(null);
 
     useEffect(() => {
         loadProperties();
@@ -45,6 +46,21 @@ export default function DashboardPage() {
             setProperties(properties.filter(p => p.id !== id));
         }
         setDeletingId(null);
+    };
+
+    const handleToggleSold = async (id: string, currentStatus: boolean) => {
+        setTogglingId(id);
+        const result = await toggleSoldStatus(id, !currentStatus);
+
+        if (result?.error) {
+            alert(result.error);
+        } else {
+            // Update local state
+            setProperties(properties.map(p =>
+                p.id === id ? { ...p, is_sold: !currentStatus } : p
+            ));
+        }
+        setTogglingId(null);
     };
 
     if (loading) {
@@ -192,6 +208,21 @@ export default function DashboardPage() {
                                                                 <Edit className="w-5 h-5" />
                                                             </button>
                                                         </Link>
+                                                        <button
+                                                            onClick={() => handleToggleSold(property.id, property.is_sold || false)}
+                                                            disabled={togglingId === property.id}
+                                                            className={`p-2 rounded-lg transition-colors disabled:opacity-50 ${property.is_sold
+                                                                    ? 'text-green-600 bg-green-50 hover:bg-green-100'
+                                                                    : 'text-slate-400 hover:text-green-600 hover:bg-green-50'
+                                                                }`}
+                                                            title={property.is_sold ? 'Mark as Available' : 'Mark as Sold/Rented'}
+                                                        >
+                                                            {togglingId === property.id ? (
+                                                                <Loader2 className="w-5 h-5 animate-spin" />
+                                                            ) : (
+                                                                <CheckCircle className="w-5 h-5" />
+                                                            )}
+                                                        </button>
                                                         <button
                                                             onClick={() => handleDelete(property.id)}
                                                             disabled={deletingId === property.id}

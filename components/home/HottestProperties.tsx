@@ -18,6 +18,7 @@ interface Property {
   propertyType: string;
   images: string[];
   featured?: boolean;
+  is_sold?: boolean;
 }
 
 interface HottestPropertiesProps {
@@ -76,6 +77,7 @@ const HottestProperties = ({ properties }: HottestPropertiesProps) => {
                   type={property.type}
                   category={property.propertyType}
                   featured={property.featured}
+                  isSold={property.is_sold}
                 />
               </motion.div>
             ))

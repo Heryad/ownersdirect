@@ -18,6 +18,7 @@ interface PropertyCardProps {
   type: 'rent' | 'sell';
   category: string;
   featured?: boolean;
+  isSold?: boolean;
 }
 
 const PropertyCard = ({
@@ -32,6 +33,7 @@ const PropertyCard = ({
   type,
   category,
   featured = false,
+  isSold = false,
 }: PropertyCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { t } = useLanguage();
@@ -102,6 +104,34 @@ const PropertyCard = ({
             {category}
           </span>
         </div>
+
+        {/* SOLD Badge - Diagonal Ribbon */}
+        {isSold && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <motion.div
+              initial={{ scale: 0, rotate: -45 }}
+              animate={{ scale: 1, rotate: -45 }}
+              transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                delay: 0.1
+              }}
+              className="relative"
+            >
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 blur-xl opacity-60" />
+
+              {/* Main badge */}
+              <div className="relative px-16 py-3 bg-gradient-to-r from-red-600 via-red-500 to-orange-500 shadow-2xl">
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-red-500 to-orange-500 animate-pulse opacity-75" />
+                <span className="relative text-white font-black text-2xl tracking-wider drop-shadow-lg">
+                  {type === 'rent' ? 'RENTED' : 'SOLD'}
+                </span>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
 
       {/* Content */}

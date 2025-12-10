@@ -51,6 +51,7 @@ create table properties (
   community text,
   status text default 'pending' check (status in ('pending', 'published', 'rejected')),
   is_published boolean default false,
+  is_sold boolean default false,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );

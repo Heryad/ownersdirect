@@ -310,3 +310,27 @@ export async function updateProperty(id: string, formData: FormData) {
     revalidatePath('/dashboard')
     redirect('/dashboard')
 }
+
+export async function toggleSoldStatus(id: string, isSold: boolean) {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return { error: 'You must be logged in to update a property' }
+    }
+
+    const { error } = await supabase
+        .from('properties')
+        .update({ is_sold: isSold })
+        .eq('id', id)
+        .eq('owner_id', user.id)
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    revalidatePath('/properties')
+    revalidatePath(`/property/${id}`)
+    revalidatePath('/dashboard')
+    return { success: true }
+}
