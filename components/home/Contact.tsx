@@ -19,24 +19,17 @@ const Contact = () => {
     {
       icon: Phone,
       title: t('contact.info.phone'),
-      details: '+1 (555) 123-4567',
+      details: '+971 (58) 133-1354',
       subdetails: 'Mon-Fri 9am-6pm',
       color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Mail,
       title: t('contact.info.email'),
-      details: 'hello@owersdirect.com',
+      details: 'operation@owersdirect.ae',
       subdetails: 'We reply within 24hrs',
       color: 'from-blue-500 to-pink-500',
-    },
-    {
-      icon: MapPin,
-      title: t('contact.info.office'),
-      details: '123 Real Estate Ave',
-      subdetails: 'Los Angeles, CA 90001',
-      color: 'from-orange-500 to-red-500',
-    },
+    }
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
